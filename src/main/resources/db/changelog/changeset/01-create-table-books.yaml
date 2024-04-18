@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-table-book
+      id: create-table-books
       author: Valentyn Sharshon
       changes:
         - createTable:
@@ -38,5 +38,5 @@ databaseChangeLog:
                   name: description
                   type: varchar(255)
               - column:
-                  name: coverImage
+                  name: cover_image
                   type: varchar(255)
