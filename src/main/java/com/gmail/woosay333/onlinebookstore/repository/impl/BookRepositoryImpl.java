@@ -26,7 +26,7 @@ public class BookRepositoryImpl implements BookRepository {
             transaction.commit();
             return book;
         } catch (Exception ex) {
-            if (transaction != null) {
+            if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert a book: " + book, ex);
