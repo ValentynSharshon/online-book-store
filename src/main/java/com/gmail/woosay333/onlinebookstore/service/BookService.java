@@ -1,10 +1,13 @@
 package com.gmail.woosay333.onlinebookstore.service;
 
-import com.gmail.woosay333.onlinebookstore.entity.Book;
+import com.gmail.woosay333.onlinebookstore.dto.BookResponseDto;
+import com.gmail.woosay333.onlinebookstore.dto.CreateBookRequestDto;
 import java.util.List;
 
 public interface BookService {
-    Book save(Book book);
+    BookResponseDto save(CreateBookRequestDto bookRequestDto);
 
-    List<Book> findAll();
+    BookResponseDto findById(Long id);
+
+    List<BookResponseDto> findAll();
 }
