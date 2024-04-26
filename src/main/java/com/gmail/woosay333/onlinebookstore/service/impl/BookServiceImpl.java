@@ -1,6 +1,6 @@
 package com.gmail.woosay333.onlinebookstore.service.impl;
 
-import com.gmail.woosay333.onlinebookstore.dto.BookResponseDto;
+import com.gmail.woosay333.onlinebookstore.dto.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.CreateBookRequestDto;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
@@ -18,13 +18,13 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Override
-    public BookResponseDto save(CreateBookRequestDto bookRequestDto) {
+    public BookDto save(CreateBookRequestDto bookRequestDto) {
         Book book = bookMapper.toModel(bookRequestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
-    public BookResponseDto findById(Long id) {
+    public BookDto findById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 String.format("Can`t find a book with id: %d", id)
         ));
@@ -32,9 +32,21 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResponseDto> findAll() {
+    public List<BookDto> findAll() {
         return bookRepository.findAll().stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public BookDto update(Long id, CreateBookRequestDto bookRequestDto) {
+        Book book = bookMapper.toModel(bookRequestDto);
+        book.setId(id);
+        return bookMapper.toDto(bookRepository.save(book));
+    }
+
+    @Override
+    public void delete(Long id) {
+        bookRepository.deleteById(id);
     }
 }
