@@ -1,7 +1,7 @@
 package com.gmail.woosay333.onlinebookstore.service.impl;
 
 import com.gmail.woosay333.onlinebookstore.dto.BookDto;
-import com.gmail.woosay333.onlinebookstore.dto.CreateBookRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
 import com.gmail.woosay333.onlinebookstore.mapper.BookMapper;
@@ -18,7 +18,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Override
-    public BookDto save(CreateBookRequestDto bookRequestDto) {
+    public BookDto create(BookRequestDto bookRequestDto) {
         Book book = bookMapper.toModel(bookRequestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto update(Long id, CreateBookRequestDto bookRequestDto) {
+    public BookDto update(Long id, BookRequestDto bookRequestDto) {
         Book book = bookMapper.toModel(bookRequestDto);
         book.setId(id);
         return bookMapper.toDto(bookRepository.save(book));
