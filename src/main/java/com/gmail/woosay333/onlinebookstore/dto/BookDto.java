@@ -6,7 +6,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CreateBookRequestDto {
+public class BookDto {
+    private Long id;
     private String title;
     private String author;
     private String isbn;

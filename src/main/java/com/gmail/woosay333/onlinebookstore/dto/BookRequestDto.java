@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BookResponseDto {
-    private Long id;
+public class BookRequestDto {
     private String title;
     private String author;
     private String isbn;
