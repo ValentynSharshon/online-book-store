@@ -1,0 +1,383 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-values-into-books
+      author: Valentyn Sharshon
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Shadow of the Wind"
+              - column:
+                  name: author
+                  value: "Carlos Ruiz Zafón"
+              - column:
+                  name: isbn
+                  value: "9780143034902"
+              - column:
+                  name: price
+                  valueNumeric: 12.99
+              - column:
+                  name: description
+                  value: "A captivating tale of mystery, love, and tragedy set in post-war Barcelona."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/shadow_of_the_wind.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "To Kill a Mockingbird"
+              - column:
+                  name: author
+                  value: "Harper Lee"
+              - column:
+                  name: isbn
+                  value: "9780061120084"
+              - column:
+                  name: price
+                  valueNumeric: 9.99
+              - column:
+                  name: description
+                  value: "A classic novel that explores themes of racial injustice and moral growth in the American South."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/to_kill_a_mockingbird.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "1984"
+              - column:
+                  name: author
+                  value: "George Orwell"
+              - column:
+                  name: isbn
+                  value: "9780451524935"
+              - column:
+                  name: price
+                  valueNumeric: 10.50
+              - column:
+                  name: description
+                  value: "A dystopian novel depicting a totalitarian regime and the struggle for freedom and truth."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/1984.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Great Gatsby"
+              - column:
+                  name: author
+                  value: "F. Scott Fitzgerald"
+              - column:
+                  name: isbn
+                  value: "9780743273565"
+              - column:
+                  name: price
+                  valueNumeric: 8.75
+              - column:
+                  name: description
+                  value: "A masterful portrayal of the Jazz Age and the American Dream, filled with love, greed, and tragedy."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_great_gatsby.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Pride and Prejudice"
+              - column:
+                  name: author
+                  value: "Jane Austen"
+              - column:
+                  name: isbn
+                  value: "9780486284736"
+              - column:
+                  name: price
+                  valueNumeric: 7.99
+              - column:
+                  name: description
+                  value: "A timeless romance that explores the societal norms and prejudices of early 19th-century England."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/pride_and_prejudice.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Catcher in the Rye"
+              - column:
+                  name: author
+                  value: "J.D. Salinger"
+              - column:
+                  name: isbn
+                  value: "9780316769488"
+              - column:
+                  name: price
+                  valueNumeric: 11.25
+              - column:
+                  name: description
+                  value: "A coming-of-age novel that follows the disillusioned teenager Holden Caulfield through New York City."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_catcher_in_the_rye.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Harry Potter and the Sorcerer's Stone"
+              - column:
+                  name: author
+                  value: "J.K. Rowling"
+              - column:
+                  name: isbn
+                  value: "9780590353427"
+              - column:
+                  name: price
+                  valueNumeric: 14.99
+              - column:
+                  name: description
+                  value: "The first book in the beloved Harry Potter series, introducing readers to the magical world of Hogwarts."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/harry_potter_and_the_sorcerers_stone.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Hobbit"
+              - column:
+                  name: author
+                  value: "J.R.R. Tolkien"
+              - column:
+                  name: isbn
+                  value: "9780345339683"
+              - column:
+                  name: price
+                  valueNumeric: 13.25
+              - column:
+                  name: description
+                  value: "A captivating adventure that follows Bilbo Baggins on a quest to reclaim the lost Dwarf Kingdom of Erebor."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_hobbit.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Lord of the Rings"
+              - column:
+                  name: author
+                  value: "J.R.R. Tolkien"
+              - column:
+                  name: isbn
+                  value: "9780544003415"
+              - column:
+                  name: price
+                  valueNumeric: 25.00
+              - column:
+                  name: description
+                  value: "An epic fantasy trilogy set in the fictional world of Middle-earth, chronicling the journey to destroy the One Ring."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_lord_of_the_rings.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Alchemist"
+              - column:
+                  name: author
+                  value: "Paulo Coelho"
+              - column:
+                  name: isbn
+                  value: "9780062315007"
+              - column:
+                  name: price
+                  valueNumeric: 11.99
+              - column:
+                  name: description
+                  value: "A philosophical novel following a young Andalusian shepherd's journey to discover his personal legend."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_alchemist.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Road"
+              - column:
+                  name: author
+                  value: "Cormac McCarthy"
+              - column:
+                  name: isbn
+                  value: "9780307387899"
+              - column:
+                  name: price
+                  valueNumeric: 9.75
+              - column:
+                  name: description
+                  value: "A post-apocalyptic novel that follows a father and son's journey through a barren, dangerous landscape."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_road.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Brave New World"
+              - column:
+                  name: author
+                  value: "Aldous Huxley"
+              - column:
+                  name: isbn
+                  value: "9780060850524"
+              - column:
+                  name: price
+                  valueNumeric: 12.50
+              - column:
+                  name: description
+                  value: "A dystopian novel set in a futuristic society where technological advances have eradicated individuality and emotion."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/brave_new_world.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Picture of Dorian Gray"
+              - column:
+                  name: author
+                  value: "Oscar Wilde"
+              - column:
+                  name: isbn
+                  value: "9780141442464"
+              - column:
+                  name: price
+                  valueNumeric: 8.99
+              - column:
+                  name: description
+                  value: "A Gothic tale of vanity, morality, and the consequences of a life devoted to pleasure."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_picture_of_dorian_gray.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Hitchhiker's Guide to the Galaxy"
+              - column:
+                  name: author
+                  value: "Douglas Adams"
+              - column:
+                  name: isbn
+                  value: "9780345391803"
+              - column:
+                  name: price
+                  valueNumeric: 10.99
+              - column:
+                  name: description
+                  value: "A comedic science fiction series following the misadventures of Arthur Dent, an ordinary human."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_hitchhikers_guide_to_the_galaxy.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Kite Runner"
+              - column:
+                  name: author
+                  value: "Khaled Hosseini"
+              - column:
+                  name: isbn
+                  value: "9781594631931"
+              - column:
+                  name: price
+                  valueNumeric: 13.49
+              - column:
+                  name: description
+                  value: "A powerful story of friendship, betrayal, and redemption set against the backdrop of Afghanistan's tumultuous history."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_kite_runner.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Grapes of Wrath"
+              - column:
+                  name: author
+                  value: "John Steinbeck"
+              - column:
+                  name: isbn
+                  value: "9780143039433"
+              - column:
+                  name: price
+                  valueNumeric: 11.00
+              - column:
+                  name: description
+                  value: "A Pulitzer Prize-winning novel that portrays the struggles of a Depression-era family as they migrate to California."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/the_grapes_of_wrath.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Frankenstein"
+              - column:
+                  name: author
+                  value: "Mary Shelley"
+              - column:
+                  name: isbn
+                  value: "9780486282114"
+              - column:
+                  name: price
+                  valueNumeric: 9.25
+              - column:
+                  name: description
+                  value: "A Gothic horror novel exploring themes of scientific hubris, ambition, and the nature of humanity."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/frankenstein.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Moby-Dick"
+              - column:
+                  name: author
+                  value: "Herman Melville"
+              - column:
+                  name: isbn
+                  value: "9780142437247"
+              - column:
+                  name: price
+                  valueNumeric: 14.00
+              - column:
+                  name: description
+                  value: "Moby-Dick is a novel by Herman Melville, first published in 1851. The story follows Ishmael, a sailor aboard the whaling ship Pequod, captained by the vengeful and enigmatic Captain Ahab. Ahab's obsessive quest for revenge against the white whale Moby Dick, who had previously maimed him, drives the crew into increasingly dangerous waters. The novel is a complex exploration of themes such as obsession, fate, and the nature of evil, and it remains one of the greatest works of American literature."
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/moby_dick.jpg"
