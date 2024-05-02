@@ -2,6 +2,7 @@ package com.gmail.woosay333.onlinebookstore.controller;
 
 import com.gmail.woosay333.onlinebookstore.dto.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.BookRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.BookSearchParameters;
 import com.gmail.woosay333.onlinebookstore.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/api/books")
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
@@ -51,5 +52,10 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         bookService.delete(id);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> search(BookSearchParameters searchParameters) {
+        return bookService.search(searchParameters);
     }
 }

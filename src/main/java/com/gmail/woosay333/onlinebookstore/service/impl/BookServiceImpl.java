@@ -2,13 +2,16 @@ package com.gmail.woosay333.onlinebookstore.service.impl;
 
 import com.gmail.woosay333.onlinebookstore.dto.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.BookRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.BookSearchParameters;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
 import com.gmail.woosay333.onlinebookstore.mapper.BookMapper;
-import com.gmail.woosay333.onlinebookstore.repository.BookRepository;
+import com.gmail.woosay333.onlinebookstore.repository.book.BookRepository;
+import com.gmail.woosay333.onlinebookstore.repository.book.BookSpecificationBuilder;
 import com.gmail.woosay333.onlinebookstore.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
     public BookDto create(BookRequestDto bookRequestDto) {
@@ -48,5 +52,14 @@ public class BookServiceImpl implements BookService {
     @Override
     public void delete(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookDto> search(BookSearchParameters searchParameters) {
+        Specification<Book> bookSpecification = bookSpecificationBuilder.build(searchParameters);
+        return bookRepository.findAll(bookSpecification)
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 }
