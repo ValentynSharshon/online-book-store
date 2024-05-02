@@ -1,43 +1,39 @@
 package com.gmail.woosay333.onlinebookstore.dto;
 
-import com.gmail.woosay333.onlinebookstore.annotation.UniqueIsbn;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.ISBN;
 
 @Data
 @Builder
 public class BookRequestDto {
-    @NotBlank(message = "The value of the Title field cannot be null or empty")
-    @Size(max = 255, message = "The length of the Title field "
-            + "cannot be longer than 255 characters")
+    private static final int SIZE_MAX_VALUE_255 = 255;
+    private static final int SIZE_MAX_VALUE_512 = 512;
+
+    @NotBlank(message = "{validation.book.title.not.blank}")
+    @Size(max = SIZE_MAX_VALUE_255, message = "{validation.book.title.size}")
     private String title;
 
-    @NotBlank(message = "The value of the Author field cannot be null or empty")
-    @Size(max = 255, message = "The length of the Author field "
-            + "cannot be longer than 255 characters")
+    @NotBlank(message = "{validation.book.author.not.blank}")
+    @Size(max = SIZE_MAX_VALUE_255, message = "{validation.book.author.size}")
     private String author;
 
-    @NotNull(message = "The value of the ISBN field cannot be null")
-    @UniqueIsbn(message = "The value of the ISBN already exists")
-    @Pattern(regexp = "^\\d{13}$", message = "The value of the ISBN field "
-            + "must exactly consist of 13 digits")
+    @NotNull(message = "{validation.book.isbn.not.null}")
+    @ISBN(type = ISBN.Type.ISBN_13, message = "{validation.book.isbn.pattern}")
     private String isbn;
 
-    @NotNull(message = "The value of the Price field cannot be null")
-    @Positive(message = "The value of the Price field must be greater than 0")
+    @NotNull(message = "{validation.book.price.not.null}")
+    @Positive(message = "{validation.book.price.positive}")
     private BigDecimal price;
 
-    @Size(max = 512, message = "The length of the Description field "
-            + "cannot be longer than 512 characters")
+    @Size(max = SIZE_MAX_VALUE_512, message = "{validation.book.description.size}")
     private String description;
 
-    @Size(max = 255, message = "The length of the Cover Image field "
-            + "cannot be longer than 255 characters")
+    @Size(max = SIZE_MAX_VALUE_255, message = "{validation.book.cover.image.size}")
     private String coverImage;
 }
