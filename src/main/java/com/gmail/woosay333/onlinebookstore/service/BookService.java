@@ -17,6 +17,4 @@ public interface BookService {
     void delete(Long id);
 
     List<BookDto> search(BookSearchParameters searchParameters);
-
-    boolean isIsbnAlreadyInUse(String value);
 }
