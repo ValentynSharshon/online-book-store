@@ -15,25 +15,35 @@ public class BookRequestDto {
     private static final int SIZE_MAX_VALUE_255 = 255;
     private static final int SIZE_MAX_VALUE_512 = 512;
 
-    @NotBlank(message = "{validation.book.title.not.blank}")
-    @Size(max = SIZE_MAX_VALUE_255, message = "{validation.book.title.size}")
+    @NotBlank(message = "The value of the Title field "
+            + "cannot be null or empty")
+    @Size(max = SIZE_MAX_VALUE_255, message = "The length of the Title field "
+            + "cannot be longer than 255 characters")
     private String title;
 
-    @NotBlank(message = "{validation.book.author.not.blank}")
-    @Size(max = SIZE_MAX_VALUE_255, message = "{validation.book.author.size}")
+    @NotBlank(message = "The value of the Author field "
+            + "cannot be null or empty")
+    @Size(max = SIZE_MAX_VALUE_255, message = "The length of the Author field "
+            + "cannot be longer than 255 characters")
     private String author;
 
-    @NotNull(message = "{validation.book.isbn.not.null}")
-    @ISBN(type = ISBN.Type.ISBN_13, message = "{validation.book.isbn.pattern}")
+    @NotNull(message = "The value of the ISBN field "
+            + "cannot be null")
+    @ISBN(type = ISBN.Type.ISBN_13, message = "The value of the ISBN field "
+            + "must match the pattern")
     private String isbn;
 
-    @NotNull(message = "{validation.book.price.not.null}")
-    @Positive(message = "{validation.book.price.positive}")
+    @NotNull(message = "The value of the Price field "
+            + "cannot be null")
+    @Positive(message = "The value of the Price field "
+            + "must be greater than 0")
     private BigDecimal price;
 
-    @Size(max = SIZE_MAX_VALUE_512, message = "{validation.book.description.size}")
+    @Size(max = SIZE_MAX_VALUE_512, message = "The length of the Description field "
+            + "cannot be longer than 512 characters")
     private String description;
 
-    @Size(max = SIZE_MAX_VALUE_255, message = "{validation.book.cover.image.size}")
+    @Size(max = SIZE_MAX_VALUE_255, message = "The length of the Cover Image field "
+            + "cannot be longer than 255 characters")
     private String coverImage;
 }
