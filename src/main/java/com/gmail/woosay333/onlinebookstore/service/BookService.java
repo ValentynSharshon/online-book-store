@@ -3,9 +3,8 @@ package com.gmail.woosay333.onlinebookstore.service;
 import com.gmail.woosay333.onlinebookstore.dto.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.BookSearchParameters;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
     BookDto create(BookRequestDto bookRequestDto);
