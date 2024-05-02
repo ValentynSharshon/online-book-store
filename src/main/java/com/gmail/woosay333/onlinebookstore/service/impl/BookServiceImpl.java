@@ -62,9 +62,4 @@ public class BookServiceImpl implements BookService {
                 .map(bookMapper::toDto)
                 .toList();
     }
-
-    @Override
-    public boolean isIsbnAlreadyInUse(String value) {
-        return bookRepository.findByIsbn(value) != null;
-    }
 }
