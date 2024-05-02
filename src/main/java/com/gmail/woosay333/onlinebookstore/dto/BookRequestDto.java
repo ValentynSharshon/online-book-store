@@ -1,5 +1,6 @@
 package com.gmail.woosay333.onlinebookstore.dto;
 
+import com.gmail.woosay333.onlinebookstore.annotation.UniqueIsbn;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -23,6 +24,7 @@ public class BookRequestDto {
     private String author;
 
     @NotNull(message = "The value of the ISBN field cannot be null")
+    @UniqueIsbn(message = "The value of the ISBN already exists")
     @Pattern(regexp = "^\\d{13}$", message = "The value of the ISBN field "
             + "must exactly consist of 13 digits")
     private String isbn;
