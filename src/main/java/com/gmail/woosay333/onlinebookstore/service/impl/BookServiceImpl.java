@@ -24,7 +24,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto create(BookRequestDto bookRequestDto) {
-        bookIsbnAlreadyExistsCheck(bookRepository.findByIsbn(bookRequestDto.getIsbn()));
+        bookIsbnAlreadyExistsCheck(bookRequestDto.getIsbn());
         Book book = bookMapper.toModel(bookRequestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
@@ -46,7 +46,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto update(Long id, BookRequestDto bookRequestDto) {
-        bookIsbnAlreadyExistsCheck(bookRepository.findByIsbn(bookRequestDto.getIsbn()));
+        bookIsbnAlreadyExistsCheck(bookRequestDto.getIsbn());
         Book book = bookMapper.toModel(bookRequestDto);
         book.setId(id);
         return bookMapper.toDto(bookRepository.save(book));
@@ -66,10 +66,11 @@ public class BookServiceImpl implements BookService {
                 .toList();
     }
 
-    private void bookIsbnAlreadyExistsCheck(Book book) {
-        if (book != null) {
+    private void bookIsbnAlreadyExistsCheck(String isbn) {
+        boolean isBookExists = bookRepository.existsBookByIsbn(isbn);
+        if (isBookExists) {
             throw new BookIsbnAlreadyExistsException(
-                    String.format("Book with isbn: %s already exists", book.getIsbn())
+                    String.format("Book with isbn: %s already exists", isbn)
             );
         }
     }
