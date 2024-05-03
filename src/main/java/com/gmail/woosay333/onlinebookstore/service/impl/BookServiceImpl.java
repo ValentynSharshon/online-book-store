@@ -4,6 +4,7 @@ import com.gmail.woosay333.onlinebookstore.dto.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.BookSearchParameters;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
+import com.gmail.woosay333.onlinebookstore.exception.BookIsbnAlreadyExistsException;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
 import com.gmail.woosay333.onlinebookstore.mapper.BookMapper;
 import com.gmail.woosay333.onlinebookstore.repository.book.BookRepository;
@@ -23,6 +24,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto create(BookRequestDto bookRequestDto) {
+        bookIsbnAlreadyExistsCheck(bookRequestDto.getIsbn());
         Book book = bookMapper.toModel(bookRequestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
@@ -44,6 +46,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto update(Long id, BookRequestDto bookRequestDto) {
+        bookIsbnAlreadyExistsCheck(bookRequestDto.getIsbn());
         Book book = bookMapper.toModel(bookRequestDto);
         book.setId(id);
         return bookMapper.toDto(bookRepository.save(book));
@@ -61,5 +64,14 @@ public class BookServiceImpl implements BookService {
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    private void bookIsbnAlreadyExistsCheck(String isbn) {
+        boolean isBookExists = bookRepository.existsBookByIsbn(isbn);
+        if (isBookExists) {
+            throw new BookIsbnAlreadyExistsException(
+                    String.format("Book with isbn: %s already exists", isbn)
+            );
+        }
     }
 }
