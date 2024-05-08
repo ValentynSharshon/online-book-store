@@ -1,4 +1,4 @@
-package com.gmail.woosay333.onlinebookstore.dto;
+package com.gmail.woosay333.onlinebookstore.dto.book;
 
 import java.math.BigDecimal;
 import lombok.Builder;

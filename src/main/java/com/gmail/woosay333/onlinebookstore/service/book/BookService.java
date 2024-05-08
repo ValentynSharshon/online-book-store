@@ -1,8 +1,8 @@
-package com.gmail.woosay333.onlinebookstore.service;
+package com.gmail.woosay333.onlinebookstore.service.book;
 
-import com.gmail.woosay333.onlinebookstore.dto.BookDto;
-import com.gmail.woosay333.onlinebookstore.dto.BookRequestDto;
-import com.gmail.woosay333.onlinebookstore.dto.BookSearchParameters;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 

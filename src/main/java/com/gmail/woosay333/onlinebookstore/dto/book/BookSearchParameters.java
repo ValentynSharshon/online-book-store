@@ -1,4 +1,4 @@
-package com.gmail.woosay333.onlinebookstore.dto;
+package com.gmail.woosay333.onlinebookstore.dto.book;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

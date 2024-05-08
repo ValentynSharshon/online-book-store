@@ -1,6 +1,6 @@
 package com.gmail.woosay333.onlinebookstore.repository.book;
 
-import com.gmail.woosay333.onlinebookstore.dto.BookSearchParameters;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
 import com.gmail.woosay333.onlinebookstore.repository.SpecificationBuilder;
 import com.gmail.woosay333.onlinebookstore.repository.SpecificationProviderManager;
