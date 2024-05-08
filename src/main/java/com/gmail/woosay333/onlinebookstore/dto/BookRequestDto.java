@@ -20,37 +20,37 @@ public class BookRequestDto {
             + "cannot be null or empty")
     @Size(max = SIZE_MAX_VALUE_255, message = "The length of the Title field "
             + "cannot be longer than 255 characters")
-    @Schema(example = "Title of the book", nullable = true)
+    @Schema(example = "Title of the book")
     private String title;
 
     @NotBlank(message = "The value of the Author field "
             + "cannot be null or empty")
     @Size(max = SIZE_MAX_VALUE_255, message = "The length of the Author field "
             + "cannot be longer than 255 characters")
-    @Schema(example = "Author of the book", nullable = true)
+    @Schema(example = "Author of the book")
     private String author;
 
     @NotNull(message = "The value of the ISBN field "
             + "cannot be null")
     @ISBN(type = ISBN.Type.ISBN_13, message = "The value of the ISBN field "
             + "must match the pattern")
-    @Schema(example = "9780143034902", nullable = true)
+    @Schema(example = "9780143034902")
     private String isbn;
 
     @NotNull(message = "The value of the Price field "
             + "cannot be null")
     @Positive(message = "The value of the Price field "
             + "must be greater than 0")
-    @Schema(example = "12.99", nullable = true)
+    @Schema(example = "12.99")
     private BigDecimal price;
 
     @Size(max = SIZE_MAX_VALUE_512, message = "The length of the Description field "
             + "cannot be longer than 512 characters")
-    @Schema(example = "Description of the book")
+    @Schema(example = "Description of the book", nullable = true)
     private String description;
 
     @Size(max = SIZE_MAX_VALUE_255, message = "The length of the Cover Image field "
             + "cannot be longer than 255 characters")
-    @Schema(example = "https://images.example.com/shadow_of_the_wind.jpg")
+    @Schema(example = "https://images.example.com/shadow_of_the_wind.jpg", nullable = true)
     private String coverImage;
 }
