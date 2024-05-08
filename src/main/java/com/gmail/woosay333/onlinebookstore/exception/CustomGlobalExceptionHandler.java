@@ -57,10 +57,8 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({BookIsbnAlreadyExistsException.class})
-    protected ResponseEntity<Object> handleBookIsbnAlreadyExistsException(
-            BookIsbnAlreadyExistsException ex
-    ) {
+    @ExceptionHandler({BookIsbnAlreadyExistsException.class, RegistrationException.class})
+    protected ResponseEntity<Object> handleBookIsbnAlreadyExistsException(Exception ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now());
         body.put(STATUS, HttpStatus.BAD_REQUEST);
