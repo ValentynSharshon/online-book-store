@@ -50,6 +50,7 @@ public class Book {
     private String coverImage;
 
     @Column(nullable = false)
+    @Builder.Default
     private boolean isDeleted = false;
 }
 
