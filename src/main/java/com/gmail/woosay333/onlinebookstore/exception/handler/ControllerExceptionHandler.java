@@ -50,7 +50,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    protected ResponseEntity<Object> handleNotFound(EntityNotFoundException ex) {
+    protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
         return getResponseEntity(NOT_FOUND, ex.getMessage());
     }
 
