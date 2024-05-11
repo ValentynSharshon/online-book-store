@@ -50,6 +50,32 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleNotFound(EntityNotFoundException ex) {
+        return getResponseEntity(NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(DataProcessingException.class)
+    protected ResponseEntity<Object> handleDataProcessingException(DataProcessingException ex) {
+        return getResponseEntity(INTERNAL_SERVER_ERROR, ex.getMessage());
+    }
+
+    @ExceptionHandler(BookIsbnAlreadyExistsException.class)
+    protected ResponseEntity<Object> handleBookIsbnAlreadyExistsException(
+            BookIsbnAlreadyExistsException ex) {
+        return getResponseEntity(CONFLICT, ex.getMessage());
+        return getResponseEntity(HttpStatus.valueOf(status.value()), errors);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+        return getResponseEntity(HttpStatus.valueOf(status.value()), ex.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
         return getResponseEntity(NOT_FOUND, ex.getMessage());
     }
