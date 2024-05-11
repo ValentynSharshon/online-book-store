@@ -4,6 +4,7 @@ import com.gmail.woosay333.onlinebookstore.validation.FieldMatch;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,7 +14,9 @@ import org.hibernate.validator.constraints.Length;
         message = "The values of the Password and Repeated Password fields do not match")
 public class UserRegistrationRequestDto {
     @NotBlank(message = "The value of the Email field cannot be null or empty")
-    @Email(message = "The value of the Email field does not match the pattern")
+    @Email(regexp = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$",
+            flags = Pattern.Flag.CASE_INSENSITIVE,
+            message = "The value of the Email field does not match the pattern")
     @Schema(example = "User registration email")
     private String email;
 
