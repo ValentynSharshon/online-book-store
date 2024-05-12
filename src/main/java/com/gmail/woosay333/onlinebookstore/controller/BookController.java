@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get a page of books.",
             description = "Get a page of books with pagination and sorting.")
     public List<BookDto> getAll(Pageable pageable) {
@@ -36,6 +38,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get a single book by id.",
             description = "Get a single book by id.")
     public BookDto getById(@PathVariable Long id) {
@@ -44,6 +47,7 @@ public class BookController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create a new book.",
             description = "Create a new book with unique ISBN.")
     public BookDto create(@RequestBody @Valid BookRequestDto bookRequestDto) {
@@ -52,6 +56,7 @@ public class BookController {
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update a book by id.",
             description = "Update a book by id.")
     public BookDto update(
@@ -63,6 +68,7 @@ public class BookController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete a book by id.",
             description = "Delete a book by id with soft delete.")
     public void delete(@PathVariable Long id) {
@@ -70,6 +76,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Returns a single page of books.",
             description = "Return filtered page of books with pagination and sorting.")
     public List<BookDto> search(BookSearchParameters searchParameters, Pageable pageable) {
