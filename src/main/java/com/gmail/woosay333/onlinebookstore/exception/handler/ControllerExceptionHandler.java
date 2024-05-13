@@ -54,34 +54,23 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return getResponseEntity(HttpStatus.valueOf(status.value()), ex.getLocalizedMessage());
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    protected ResponseEntity<Object> handleNotFound(EntityNotFoundException ex) {
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex) {
+        return getResponseEntity(FORBIDDEN, ex.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    protected ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
+        return getResponseEntity(UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    protected ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException ex) {
         return getResponseEntity(NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler(DataProcessingException.class)
-    protected ResponseEntity<Object> handleDataProcessingException(DataProcessingException ex) {
-        return getResponseEntity(INTERNAL_SERVER_ERROR, ex.getMessage());
-    }
-
-    @ExceptionHandler(BookIsbnAlreadyExistsException.class)
-    protected ResponseEntity<Object> handleBookIsbnAlreadyExistsException(
-            BookIsbnAlreadyExistsException ex) {
-        return getResponseEntity(CONFLICT, ex.getMessage());
-        return getResponseEntity(HttpStatus.valueOf(status.value()), errors);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
-        return getResponseEntity(HttpStatus.valueOf(status.value()), ex.getLocalizedMessage());
-    }
-
     @ExceptionHandler(EntityNotFoundException.class)
-    protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+    protected ResponseEntity<Object> handleNotFound(EntityNotFoundException ex) {
         return getResponseEntity(NOT_FOUND, ex.getMessage());
     }
 
@@ -93,21 +82,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({BookIsbnAlreadyExistsException.class, RegistrationException.class})
     protected ResponseEntity<Object> handleBookIsbnAlreadyExistsException(Exception ex) {
         return getResponseEntity(CONFLICT, ex.getMessage());
-    }
-
-    @ExceptionHandler(UsernameNotFoundException.class)
-    protected ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException ex) {
-        return getResponseEntity(NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    protected ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex) {
-        return getResponseEntity(FORBIDDEN, ex.getMessage());
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    protected ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
-        return getResponseEntity(UNAUTHORIZED, ex.getMessage());
     }
 
     private String getErrorMessage(ObjectError error) {
