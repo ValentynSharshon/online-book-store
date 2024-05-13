@@ -2,6 +2,7 @@ package com.gmail.woosay333.onlinebookstore.controller;
 
 import com.gmail.woosay333.onlinebookstore.dto.user.UserRegistrationRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.user.UserResponseDto;
+import com.gmail.woosay333.onlinebookstore.exception.RegistrationException;
 import com.gmail.woosay333.onlinebookstore.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +29,7 @@ public class AuthController {
             description = "Register a new user with unique email.")
     public UserResponseDto register(
             @RequestBody @Valid UserRegistrationRequestDto userRegistrationRequestDto
-    ) {
+    ) throws RegistrationException {
         return userService.register(userRegistrationRequestDto);
     }
 }

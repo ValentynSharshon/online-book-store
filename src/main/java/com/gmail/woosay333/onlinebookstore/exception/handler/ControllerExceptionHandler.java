@@ -59,14 +59,8 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return getResponseEntity(INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
-    @ExceptionHandler(BookIsbnAlreadyExistsException.class)
-    protected ResponseEntity<Object> handleBookIsbnAlreadyExistsException(
-            BookIsbnAlreadyExistsException ex) {
-        return getResponseEntity(CONFLICT, ex.getMessage());
-    }
-
-    @ExceptionHandler(RegistrationException.class)
-    protected ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
+    @ExceptionHandler({BookIsbnAlreadyExistsException.class, RegistrationException.class})
+    protected ResponseEntity<Object> handleBookIsbnAlreadyExistsException(Exception ex) {
         return getResponseEntity(CONFLICT, ex.getMessage());
     }
 

@@ -1,29 +1,16 @@
 package com.gmail.woosay333.onlinebookstore.validation;
 
+import com.gmail.woosay333.onlinebookstore.dto.user.UserRegistrationRequestDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.beans.BeanWrapperImpl;
+import java.util.Objects;
 
-public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
-    private String firstFieldName;
-    private String secondFieldName;
-
+public class FieldMatchValidator
+        implements ConstraintValidator<FieldMatch, UserRegistrationRequestDto> {
     @Override
-    public void initialize(FieldMatch constraintAnnotation) {
-        this.firstFieldName = constraintAnnotation.first();
-        this.secondFieldName = constraintAnnotation.second();
-    }
-
-    @Override
-    public boolean isValid(Object value, ConstraintValidatorContext context) {
-        try {
-            Object firstValue = new BeanWrapperImpl(value).getPropertyValue(firstFieldName);
-            Object secondValue = new BeanWrapperImpl(value).getPropertyValue(secondFieldName);
-
-            return firstValue == null && secondValue == null
-                    || firstValue != null && firstValue.equals(secondValue);
-        } catch (Exception ex) {
-            return false;
-        }
+    public boolean isValid(UserRegistrationRequestDto userRegistrationRequestDto,
+                           ConstraintValidatorContext context) {
+        return Objects.equals(userRegistrationRequestDto.getPassword(),
+                userRegistrationRequestDto.getRepeatPassword());
     }
 }
