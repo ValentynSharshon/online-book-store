@@ -1,15 +1,15 @@
-package com.gmail.woosay333.onlinebookstore.service.impl;
+package com.gmail.woosay333.onlinebookstore.service.book.impl;
 
-import com.gmail.woosay333.onlinebookstore.dto.BookDto;
-import com.gmail.woosay333.onlinebookstore.dto.BookRequestDto;
-import com.gmail.woosay333.onlinebookstore.dto.BookSearchParameters;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
 import com.gmail.woosay333.onlinebookstore.exception.BookIsbnAlreadyExistsException;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
 import com.gmail.woosay333.onlinebookstore.mapper.BookMapper;
 import com.gmail.woosay333.onlinebookstore.repository.book.BookRepository;
 import com.gmail.woosay333.onlinebookstore.repository.book.BookSpecificationBuilder;
-import com.gmail.woosay333.onlinebookstore.service.BookService;
+import com.gmail.woosay333.onlinebookstore.service.book.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

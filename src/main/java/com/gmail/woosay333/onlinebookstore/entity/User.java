@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,9 +17,9 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Table(name = "books")
-@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id = ?")
-@SQLRestriction("is_deleted = false")
+@Table(name = "users")
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
+@SQLRestriction(value = "is_deleted = false")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -28,30 +27,25 @@ import org.hibernate.annotations.SQLRestriction;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class Book {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
-    private String author;
-
-    @Column(unique = true, nullable = false)
-    private String isbn;
+    private String password;
 
     @Column(nullable = false)
-    private BigDecimal price;
-
-    private String description;
-
-    private String coverImage;
+    private String firstName;
 
     @Column(nullable = false)
-    @Builder.Default
-    private boolean isDeleted = false;
+    private String lastName;
+
+    private String shippingAddress;
+
+    @Column(nullable = false)
+    private boolean isDeleted;
 }
-
-
