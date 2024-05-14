@@ -1,10 +1,8 @@
 package com.gmail.woosay333.onlinebookstore.exception.handler;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import com.gmail.woosay333.onlinebookstore.exception.BookIsbnAlreadyExistsException;
 import com.gmail.woosay333.onlinebookstore.exception.DataProcessingException;
@@ -20,9 +18,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,21 +47,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode status,
             WebRequest request) {
         return getResponseEntity(HttpStatus.valueOf(status.value()), ex.getLocalizedMessage());
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    protected ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex) {
-        return getResponseEntity(FORBIDDEN, ex.getMessage());
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    protected ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
-        return getResponseEntity(UNAUTHORIZED, ex.getMessage());
-    }
-
-    @ExceptionHandler(UsernameNotFoundException.class)
-    protected ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException ex) {
-        return getResponseEntity(NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
