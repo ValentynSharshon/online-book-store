@@ -5,3 +5,13 @@ databaseChangeLog:
       file: db/changelog/changeset/02-insert-values-into-books.yaml
   - include:
       file: db/changelog/changeset/03-create-table-users.yaml
+  - include:
+      file: db/changelog/changeset/04-create-table-roles.yml
+  - include:
+      file: db/changelog/changeset/05-create-table-users_roles.yml
+  - include:
+      file: db/changelog/changeset/06-insert-values-into-roles.yml
+  - include:
+      file: db/changelog/changeset/07-insert-values-into-users.yml
+  - include:
+      file: db/changelog/changeset/08-insert-values-into-users_roles.yml

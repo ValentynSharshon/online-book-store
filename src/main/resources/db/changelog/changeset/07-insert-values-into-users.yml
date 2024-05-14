@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-values-into-users
+      author: Valentyn Sharshon
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "admin@email.com"
+              - column:
+                  name: password
+                  value: "$2a$10$3evKgGvs98QqQoP6LcJQFOFWlDwmR9mbNLNV3iHVg87IBptsTwWAm"
+              - column:
+                  name: first_name
+                  value: "Valentyn"
+              - column:
+                  name: last_name
+                  value: "Sharshon"
+              - column:
+                  name: shipping_address
+                  value: "Some address"
