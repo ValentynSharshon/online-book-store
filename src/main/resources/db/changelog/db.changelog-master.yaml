@@ -15,3 +15,7 @@ databaseChangeLog:
       file: db/changelog/changeset/07-insert-values-into-users.yml
   - include:
       file: db/changelog/changeset/08-insert-values-into-users_roles.yml
+  - include:
+      file: db/changelog/changeset/09-create-table-categories.yaml
+  - include:
+      file: db/changelog/changeset/10-create-table-books_categories.yml
