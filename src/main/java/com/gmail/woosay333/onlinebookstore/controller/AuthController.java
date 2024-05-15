@@ -27,8 +27,7 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
-    @PostMapping(value = "/registration",
-            produces = "application/json; charset=UTF-8")
+    @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Register a new user.",
             description = "Register a new user with unique email.")
@@ -38,8 +37,7 @@ public class AuthController {
         return userService.register(userRegistrationRequestDto);
     }
 
-    @PostMapping(value = "/login",
-            produces = "application/json; charset=UTF-8")
+    @PostMapping("/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "Login user.",
             description = "Login user by email and password. Returned JWT token in response.")
