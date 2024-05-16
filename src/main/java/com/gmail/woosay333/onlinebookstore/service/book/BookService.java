@@ -3,6 +3,7 @@ package com.gmail.woosay333.onlinebookstore.service.book;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookWithoutCategoryIdsDto;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -17,5 +18,8 @@ public interface BookService {
 
     void delete(Long id);
 
-    List<BookDto> search(BookSearchParameters searchParameters, Pageable pageable);
+    List<BookWithoutCategoryIdsDto> search(BookSearchParameters searchParameters,
+                                           Pageable pageable);
+
+    List<BookWithoutCategoryIdsDto> getByCategoryId(Long id, Pageable pageable);
 }
