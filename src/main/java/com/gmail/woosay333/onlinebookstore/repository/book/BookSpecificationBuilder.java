@@ -10,33 +10,34 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
-    private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
+public class BookSpecificationBuilder implements SpecificationBuilder<Book, BookSearchParameters> {
+    private final SpecificationProviderManager<Book> productSpecificationProviderManager;
 
     @Override
-    public Specification<Book> build(BookSearchParameters bookSearchParametersDto) {
+    public Specification<Book> build(BookSearchParameters searchParams) {
         Specification<Book> spec = Specification.where(null);
-        spec = buildSpecification(spec,
-                bookSearchParametersDto.authors(),
-                "author");
-        spec = buildSpecification(spec,
-                bookSearchParametersDto.titles(), "title");
+        if (isParameterPresent(searchParams.provider())) {
+            spec = addSpecification(spec, "provider", searchParams.provider());
+        }
+        if (isParameterPresent(searchParams.name())) {
+            spec = addSpecification(spec, "name", searchParams.name());
+        }
         return spec;
     }
 
-    private Specification<Book> buildSpecification(
+    private Specification<Book> addSpecification(
             Specification<Book> specification,
-            String[] params, String key
+            String key,
+            String[] params
     ) {
-        if (isSearchParamsNullOrEmpty(params)) {
-            return specification;
-        }
-        return specification.and(bookSpecificationProviderManager
+        return specification.and(
+                productSpecificationProviderManager
                 .getSpecificationProvider(key)
-                .getSpecification(params));
+                .getSpecification(params)
+        );
     }
 
-    private boolean isSearchParamsNullOrEmpty(String[] params) {
-        return params == null || params.length == 0;
+    private boolean isParameterPresent(String[] param) {
+        return param != null && param.length > 0;
     }
 }
