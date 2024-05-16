@@ -1,8 +1,10 @@
 package com.gmail.woosay333.onlinebookstore.exception.handler;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import com.gmail.woosay333.onlinebookstore.exception.BookIsbnAlreadyExistsException;
 import com.gmail.woosay333.onlinebookstore.exception.DataProcessingException;
@@ -12,12 +14,16 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -62,6 +68,16 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({BookIsbnAlreadyExistsException.class, RegistrationException.class})
     protected ResponseEntity<Object> handleBookIsbnAlreadyExistsException(Exception ex) {
         return getResponseEntity(CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex) {
+        return getResponseEntity(FORBIDDEN, ex.getMessage());
+    }
+
+    @ExceptionHandler({JwtException.class, AuthenticationException.class})
+    protected ResponseEntity<Object> handleAuthenticationException(Exception ex) {
+        return getResponseEntity(UNAUTHORIZED, ex.getMessage());
     }
 
     private String getErrorMessage(ObjectError error) {
