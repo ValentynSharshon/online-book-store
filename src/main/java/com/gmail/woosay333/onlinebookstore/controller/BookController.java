@@ -3,6 +3,7 @@ package com.gmail.woosay333.onlinebookstore.controller;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookWithoutCategoryIdsDto;
 import com.gmail.woosay333.onlinebookstore.service.book.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -79,7 +80,10 @@ public class BookController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Returns a single page of books.",
             description = "Return filtered page of books with pagination and sorting.")
-    public List<BookDto> search(BookSearchParameters searchParameters, Pageable pageable) {
+    public List<BookWithoutCategoryIdsDto> search(
+            BookSearchParameters searchParameters,
+            Pageable pageable
+    ) {
         return bookService.search(searchParameters, pageable);
     }
 }
