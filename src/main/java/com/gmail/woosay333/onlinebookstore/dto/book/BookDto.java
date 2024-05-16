@@ -1,11 +1,12 @@
 package com.gmail.woosay333.onlinebookstore.dto.book;
 
 import java.math.BigDecimal;
-import lombok.Builder;
+import java.util.Set;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
-@Builder
+@Accessors(chain = true)
 public class BookDto {
     private Long id;
     private String title;
@@ -14,4 +15,5 @@ public class BookDto {
     private BigDecimal price;
     private String description;
     private String coverImage;
+    private Set<Long> categoryIds;
 }
