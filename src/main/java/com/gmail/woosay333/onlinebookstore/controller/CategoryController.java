@@ -1,6 +1,6 @@
 package com.gmail.woosay333.onlinebookstore.controller;
 
-import com.gmail.woosay333.onlinebookstore.dto.book.BookWithoutCategoryIdsDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.gmail.woosay333.onlinebookstore.dto.category.CategoryRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.category.CategoryResponseDto;
 import com.gmail.woosay333.onlinebookstore.service.book.BookService;
@@ -81,7 +81,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Returns a single page of books.",
             description = "Return filtered page of books by category with pagination and sorting.")
-    public List<BookWithoutCategoryIdsDto> getByCategoryId(
+    public List<BookDtoWithoutCategoryIds> getByCategoryId(
             @PathVariable Long id,
             Pageable pageable
     ) {

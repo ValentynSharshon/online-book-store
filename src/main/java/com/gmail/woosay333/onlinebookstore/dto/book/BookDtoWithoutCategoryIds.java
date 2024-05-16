@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class BookWithoutCategoryIdsDto {
+public class BookDtoWithoutCategoryIds {
     private Long id;
     private String title;
     private String author;

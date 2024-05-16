@@ -3,7 +3,7 @@ package com.gmail.woosay333.onlinebookstore.service.book.impl;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
-import com.gmail.woosay333.onlinebookstore.dto.book.BookWithoutCategoryIdsDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
 import com.gmail.woosay333.onlinebookstore.exception.BookIsbnAlreadyExistsException;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
@@ -65,22 +65,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookWithoutCategoryIdsDto> search(
+    public List<BookDtoWithoutCategoryIds> search(
             BookSearchParameters searchParameters,
             Pageable pageable
     ) {
         Specification<Book> productSpecification = bookSpecificationBuilder
                 .build(searchParameters);
         return bookRepository.findAll(productSpecification, pageable).stream()
-                .map(bookMapper::toDtoWithoutCategories)
+                .map(bookMapper::toDtoWithoutCategoryIds)
                 .toList();
     }
 
     @Override
-    public List<BookWithoutCategoryIdsDto> getByCategoryId(Long id, Pageable pageable) {
-        return bookRepository.findAllByCategoryId(id, pageable)
+    public List<BookDtoWithoutCategoryIds> getByCategoryId(Long id, Pageable pageable) {
+        return bookRepository.findByCategoriesId(id, pageable)
                 .stream()
-                .map(bookMapper::toDtoWithoutCategories)
+                .map(bookMapper::toDtoWithoutCategoryIds)
                 .toList();
     }
 

@@ -11,8 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
     boolean existsBookByIsbn(String isbn);
 
-    @Query("FROM Book b LEFT JOIN FETCH b.categories c WHERE c.id = :categoryId")
-    List<Book> findAllByCategoryId(Long categoryId, Pageable pageable);
+    List<Book> findByCategoriesId(Long categoryId, Pageable pageable);
 
     @Query("FROM Book b LEFT JOIN FETCH b.categories")
     List<Book> findAllWithCategories(Pageable pageable);

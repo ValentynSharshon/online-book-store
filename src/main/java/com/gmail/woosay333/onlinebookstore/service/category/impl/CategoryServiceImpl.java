@@ -26,18 +26,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryResponseDto> findAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable).stream()
-                .map(categoryMapper::toDto)
-                .toList();
+        return categoryMapper.toDtoList(categoryRepository.findAll());
     }
 
     @Override
     public CategoryResponseDto findById(Long id) {
-        return categoryRepository.findById(id)
-                .map(categoryMapper::toDto)
+        return categoryMapper.toDto(categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Can`t find a category with id: %d", id)
-                ));
+                )));
     }
 
     @Override
