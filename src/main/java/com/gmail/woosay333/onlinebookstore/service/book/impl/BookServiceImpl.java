@@ -3,6 +3,7 @@ package com.gmail.woosay333.onlinebookstore.service.book.impl;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookWithoutCategoryIdsDto;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
 import com.gmail.woosay333.onlinebookstore.exception.BookIsbnAlreadyExistsException;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
@@ -32,21 +33,26 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto findById(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-                String.format("Can`t find a book with id: %d", id)
-        ));
+        Book book = bookRepository.findByIdWithCategories(id).orElseThrow(
+                () -> new EntityNotFoundException(
+                        String.format("Can`t find a book with id: %d", id)
+                ));
         return bookMapper.toDto(book);
     }
 
     @Override
     public List<BookDto> findAll(Pageable pageable) {
-        return bookRepository.findAll(pageable).stream()
+        return bookRepository.findAllWithCategories(pageable)
+                .stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
 
     @Override
     public BookDto update(Long id, BookRequestDto bookRequestDto) {
+        if (!bookRepository.existsById(id)) {
+            throw new EntityNotFoundException(String.format("Can`t find Book with id: %d", id));
+        }
         bookIsbnAlreadyExistsCheck(bookRequestDto.getIsbn());
         Book book = bookMapper.toModel(bookRequestDto);
         book.setId(id);
@@ -59,11 +65,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParameters searchParameters, Pageable pageable) {
-        Specification<Book> bookSpecification = bookSpecificationBuilder.build(searchParameters);
-        return bookRepository.findAll(bookSpecification, pageable)
+    public List<BookWithoutCategoryIdsDto> search(
+            BookSearchParameters searchParameters,
+            Pageable pageable
+    ) {
+        Specification<Book> productSpecification = bookSpecificationBuilder
+                .build(searchParameters);
+        return bookRepository.findAll(productSpecification, pageable).stream()
+                .map(bookMapper::toDtoWithoutCategories)
+                .toList();
+    }
+
+    @Override
+    public List<BookWithoutCategoryIdsDto> getByCategoryId(Long id, Pageable pageable) {
+        return bookRepository.findAllByCategoryId(id, pageable)
                 .stream()
-                .map(bookMapper::toDto)
+                .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 
