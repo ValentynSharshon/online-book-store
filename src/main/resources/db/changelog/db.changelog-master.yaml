@@ -19,3 +19,11 @@ databaseChangeLog:
       file: db/changelog/changeset/09-create-table-categories.yaml
   - include:
       file: db/changelog/changeset/10-create-table-books_categories.yml
+  - include:
+      file: db/changelog/changeset/11-insert-value-into-users.yml
+  - include:
+      file: db/changelog/changeset/12-insert-value-into-users_roles.yml
+  - include:
+      file: db/changelog/changeset/13-insert-value-into-categories.yml
+  - include:
+      file: db/changelog/changeset/14-insert-value-into-books_categories.yml
