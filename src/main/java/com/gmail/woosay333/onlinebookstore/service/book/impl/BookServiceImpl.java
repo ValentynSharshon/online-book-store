@@ -44,6 +44,7 @@ public class BookServiceImpl implements BookService {
     public List<BookDto> findAll(Pageable pageable) {
         return bookRepository.findAllWithCategories(pageable)
                 .stream()
+                .filter(book -> !book.getCategories().isEmpty())
                 .map(bookMapper::toDto)
                 .toList();
     }
