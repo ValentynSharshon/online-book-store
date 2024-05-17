@@ -14,13 +14,14 @@ public class BookSpecificationProviderManager implements SpecificationProviderMa
     private final List<SpecificationProvider<Book>> bookSpecificationProviders;
 
     @Override
-    public SpecificationProvider<Book> getSpecificationProvider(String bookSearchParameter) {
+    public SpecificationProvider<Book> getSpecificationProvider(String key) {
         return bookSpecificationProviders.stream()
-                .filter(provider -> provider.getSearchParameter()
-                        .equals(bookSearchParameter))
+                .filter(p -> p.getKey().equals(key))
                 .findFirst()
-                .orElseThrow(() -> new NoSuchElementException(
-                        String.format("Can't find correct specification provider or parameter %s",
-                                bookSearchParameter)));
+                .orElseThrow(() ->
+                        new NoSuchElementException(
+                                String.format(
+                                        "Can`t find correct specification provider for key %s", key
+                                )));
     }
 }
