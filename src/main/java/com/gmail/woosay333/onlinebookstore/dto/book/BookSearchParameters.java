@@ -7,6 +7,7 @@ public record BookSearchParameters(
                 example = "The Great Gatsby")
         String[] titles,
         @Schema(description = "Filtering the result list by book author",
-                example = "F. Scott Fitzgerald")
-        String[] authors) {
+                example = "J.R.R. Tolkien")
+        String[] authors
+) {
 }

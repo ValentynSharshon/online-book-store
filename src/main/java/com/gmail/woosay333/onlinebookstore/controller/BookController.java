@@ -79,7 +79,10 @@ public class BookController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Returns a single page of books.",
             description = "Return filtered page of books with pagination and sorting.")
-    public List<BookDto> search(BookSearchParameters searchParameters, Pageable pageable) {
+    public List<BookDto> search(
+            BookSearchParameters searchParameters,
+            Pageable pageable
+    ) {
         return bookService.search(searchParameters, pageable);
     }
 }

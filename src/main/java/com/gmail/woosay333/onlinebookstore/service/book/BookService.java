@@ -1,6 +1,7 @@
 package com.gmail.woosay333.onlinebookstore.service.book;
 
 import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
 import java.util.List;
@@ -17,5 +18,8 @@ public interface BookService {
 
     void delete(Long id);
 
-    List<BookDto> search(BookSearchParameters searchParameters, Pageable pageable);
+    List<BookDto> search(BookSearchParameters searchParameters,
+                                           Pageable pageable);
+
+    List<BookDtoWithoutCategoryIds> getByCategoryId(Long id, Pageable pageable);
 }

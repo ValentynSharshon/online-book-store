@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-value-into-categories
+      author: Valentyn Sharshon
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: "Novel"
+              - column:
+                  name: description
+                  value: "An invented prose narrative of considerable length and a certain complexity that deals imaginatively with human experience, usually through a connected sequence of events involving a group of persons in a specific setting."
+        - insert:
+              tableName: categories
+              columns:
+                - column:
+                    name: name
+                    value: "Fantasy"
+                - column:
+                    name: description
+                    value: "Fantasy literature is literature set in an imaginary universe, often but not always without any locations, events, or people from the real world. Magic, the supernatural and magical creatures are common in many of these imaginary worlds. Fantasy literature may be directed at both children and adults."
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: "Adventure"
+              - column:
+                  name: description
+                  value: "Adventure novels typically have fast-paced, action-packed plot lines. Stories about epic journeys or epic tales - often involving a mixture of adventure and fantasy - culminate with a thrilling climax or a series of climactic events."
+        - insert:
+              tableName: categories
+              columns:
+                - column:
+                    name: name
+                    value: "Gothic"
+                - column:
+                    name: description
+                    value: "The Gothic novel is a genre associated with the mystery and intrigue surrounding the supernatural and the unknown. Characteristics of the Gothic include: death and decay, haunted homes/castles, family curses, madness, powerful love/romance, ghosts, and vampires."
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: "Comedic"
+              - column:
+                  name: description
+                  value: "The humorous or comedy genre is made up of books about a series of funny or comical events or scenes that are intended to make the reader laugh. Books in the comedy genre can also be about a particular quirky character that is funny or amusing."
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: "Horror"
+              - column:
+                  name: description
+                  value: "Horror story, a story in which the focus is on creating a feeling of fear. Such tales are of ancient origin and form a substantial part of the body of folk literature. They can feature supernatural elements such as ghosts, witches, or vampires, or they can address more realistic psychological fears."
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: "Romance"
+              - column:
+                  name: description
+                  value: "A romance novel or romantic novel is a genre fiction novel that primary focuses on the relationship and romantic love between two people, typically with an emotionally satisfying and optimistic ending."

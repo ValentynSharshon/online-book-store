@@ -1,15 +1,13 @@
 package com.gmail.woosay333.onlinebookstore.dto.book;
 
 import java.math.BigDecimal;
-import java.util.Set;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class BookDto {
+public class BookDtoWithoutCategoryIds {
     private Long id;
-    private Set<Long> categoryIds;
     private String title;
     private String author;
     private String isbn;

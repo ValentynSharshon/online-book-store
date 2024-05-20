@@ -2,10 +2,12 @@ package com.gmail.woosay333.onlinebookstore.dto.book;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Set;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.ISBN;
@@ -22,6 +24,10 @@ public class BookRequestDto {
             + "cannot be longer than 255 characters")
     @Schema(example = "Title of the book")
     private String title;
+
+    @NotEmpty(message = "Set of categories should not be empty.")
+    @Schema(example = "[1, 3 ,8, 10]")
+    private Set<Long> categoryIds;
 
     @NotBlank(message = "The value of the Author field "
             + "cannot be null or empty")
