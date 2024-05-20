@@ -27,3 +27,7 @@ databaseChangeLog:
       file: db/changelog/changeset/13-insert-value-into-categories.yml
   - include:
       file: db/changelog/changeset/14-insert-value-into-books_categories.yml
+  - include:
+      file: db/changelog/changeset/15-create-table-shopping_carts.yaml
+  - include:
+      file: db/changelog/changeset/16-create-table-cart_items.yaml
