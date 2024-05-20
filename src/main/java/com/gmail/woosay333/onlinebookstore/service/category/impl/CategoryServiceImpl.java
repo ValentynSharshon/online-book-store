@@ -8,6 +8,8 @@ import com.gmail.woosay333.onlinebookstore.mapper.CategoryMapper;
 import com.gmail.woosay333.onlinebookstore.repository.category.CategoryRepository;
 import com.gmail.woosay333.onlinebookstore.service.category.CategoryService;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,13 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(Long id) {
         isCategoryExist(id);
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Set<Long> getAllExistedCategoryIdsFromIds(Set<Long> categoryIds) {
+        return categoryRepository.findAllByIdIn(categoryIds)
+                .stream().map(Category::getId)
+                .collect(Collectors.toSet());
     }
 
     private void isCategoryExist(Long id) {
