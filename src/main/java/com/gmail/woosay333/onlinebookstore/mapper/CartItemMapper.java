@@ -1,7 +1,8 @@
 package com.gmail.woosay333.onlinebookstore.mapper;
 
 import com.gmail.woosay333.onlinebookstore.config.MapperConfig;
-import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.CartItemDto;
+import com.gmail.woosay333.onlinebookstore.dto.cart.item.CartItemResponseDto;
+import com.gmail.woosay333.onlinebookstore.dto.cart.item.CreateCartItemRequestDto;
 import com.gmail.woosay333.onlinebookstore.entity.CartItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,8 +14,10 @@ import org.mapstruct.ReportingPolicy;
 public interface CartItemMapper {
     @Mapping(source = "book.id", target = "bookId")
     @Mapping(source = "book.title", target = "bookTitle")
-    CartItemDto toDto(CartItem cartItem);
+    CartItemResponseDto toDto(CartItem cartItem);
 
     @Mapping(target = "book", source = "bookId", qualifiedByName = "bookFromId")
-    CartItem toModel(CartItemDto cartItemDto);
+    CartItem toModel(CartItemResponseDto cartItemResponseDto);
+
+    CartItem toModel(CreateCartItemRequestDto cartItemRequestDto);
 }

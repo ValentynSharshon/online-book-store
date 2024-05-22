@@ -1,4 +1,4 @@
-package com.gmail.woosay333.onlinebookstore.repository.shopping.cart;
+package com.gmail.woosay333.onlinebookstore.repository.cart.item;
 
 import com.gmail.woosay333.onlinebookstore.entity.CartItem;
 import java.util.Optional;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-    @Query("FROM CartItem ci WHERE ci.id = :cartItemId AND ci.shoppingCart.id = :shoppingCartId")
-    Optional<CartItem> findByIdAndShoppingCartId(Long cartItemId, Long shoppingCartId);
+    @Query("SELECT c FROM CartItem c WHERE c.book.id = :bookId "
+            + "AND c.shoppingCart.id = :shoppingCartId")
+    Optional<CartItem> findBookInCart(Long bookId, Long shoppingCartId);
 }

@@ -1,9 +1,9 @@
 package com.gmail.woosay333.onlinebookstore.controller;
 
-import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.CartItemDto;
-import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.CreateCartItemRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.cart.item.CartItemResponseDto;
+import com.gmail.woosay333.onlinebookstore.dto.cart.item.CreateCartItemRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.cart.item.UpdateCartItemRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.ShoppingCartDto;
-import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.UpdateCartItemRequestDto;
 import com.gmail.woosay333.onlinebookstore.entity.User;
 import com.gmail.woosay333.onlinebookstore.service.shopping.cart.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,8 +36,8 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get a shopping cart.",
             description = "Retrieve the user's shopping cart from DB.")
-    public ShoppingCartDto getShoppingCart() {
-        return shoppingCartService.getShoppingCart();
+    public ShoppingCartDto getShoppingCart(@AuthenticationPrincipal User user) {
+        return shoppingCartService.getShoppingCart(user.getId());
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -45,8 +45,8 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add new item to a cart.",
             description = "Save a new item to the user's shopping cart through DB.")
-    public ShoppingCartDto addToCart(@RequestBody @Valid CreateCartItemRequestDto request,
-                                     @AuthenticationPrincipal User user) {
+    public CartItemResponseDto addToCart(@RequestBody @Valid CreateCartItemRequestDto request,
+                                         @AuthenticationPrincipal User user) {
         return shoppingCartService.addToCart(request, user);
     }
 
@@ -55,10 +55,12 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update a cart item.",
             description = "Update an existing cart item in the user's shopping cart by its ID.")
-    public CartItemDto updateCartItem(@PathVariable Long cartItemId,
-                                      @RequestBody @Valid UpdateCartItemRequestDto request,
-                                      @AuthenticationPrincipal User user) {
-        return shoppingCartService.updateCartItem(cartItemId, request, user.getId());
+    public CartItemResponseDto updateCartItem(
+            @PathVariable Long cartItemId,
+            @RequestBody @Valid UpdateCartItemRequestDto requestDto,
+            @AuthenticationPrincipal User user
+    ) {
+        return shoppingCartService.updateCartItem(cartItemId, requestDto, user.getId());
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
