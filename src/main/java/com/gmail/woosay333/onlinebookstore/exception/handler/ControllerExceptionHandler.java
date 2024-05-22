@@ -8,6 +8,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import com.gmail.woosay333.onlinebookstore.exception.BookIsbnAlreadyExistsException;
 import com.gmail.woosay333.onlinebookstore.exception.DataProcessingException;
+import com.gmail.woosay333.onlinebookstore.exception.EntityAlreadyExistException;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
 import com.gmail.woosay333.onlinebookstore.exception.RegistrationException;
 import io.jsonwebtoken.JwtException;
@@ -64,8 +65,10 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return getResponseEntity(INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
-    @ExceptionHandler({BookIsbnAlreadyExistsException.class, RegistrationException.class})
-    protected ResponseEntity<Object> handleBookIsbnAlreadyExistsException(Exception ex) {
+    @ExceptionHandler({BookIsbnAlreadyExistsException.class,
+            RegistrationException.class,
+            EntityAlreadyExistException.class})
+    protected ResponseEntity<Object> handleEntityConflictException(Exception ex) {
         return getResponseEntity(CONFLICT, ex.getMessage());
     }
 
