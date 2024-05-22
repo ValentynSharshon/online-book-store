@@ -1,9 +1,9 @@
 package com.gmail.woosay333.onlinebookstore.controller;
 
 import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.CartItemDto;
-import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.UpdateCartItemRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.CreateCartItemRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.ShoppingCartDto;
+import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.UpdateCartItemRequestDto;
 import com.gmail.woosay333.onlinebookstore.entity.User;
 import com.gmail.woosay333.onlinebookstore.service.shopping.cart.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +58,7 @@ public class ShoppingCartController {
     public CartItemDto updateCartItem(@PathVariable Long cartItemId,
                                       @RequestBody @Valid UpdateCartItemRequestDto request,
                                       @AuthenticationPrincipal User user) {
-        return shoppingCartService.updateCartItem(cartItemId, request ,user.getId());
+        return shoppingCartService.updateCartItem(cartItemId, request, user.getId());
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
