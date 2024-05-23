@@ -43,4 +43,7 @@ public class OrderItem {
 
     @Column(nullable = false)
     private BigDecimal price;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 }
