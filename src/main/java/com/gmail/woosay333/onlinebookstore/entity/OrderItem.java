@@ -7,43 +7,40 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Table(name = "shopping_carts")
+@Table(name = "order_items")
 @Data
-@NoArgsConstructor
-@SQLDelete(sql = "UPDATE shopping_carts SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE order_items SET is_deleted = true WHERE id = ?")
 @SQLRestriction(value = "is_deleted = false")
-public class ShoppingCart {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     @EqualsAndHashCode.Exclude
-    private User user;
+    @ToString.Exclude
+    private Order order;
 
-    @Cascade(CascadeType.REMOVE)
-    @OneToMany(mappedBy = "shoppingCart")
-    private Set<CartItem> cartItems = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Book book;
 
     @Column(nullable = false)
-    private boolean isDeleted = false;
+    private int quantity;
+
+    @Column(nullable = false)
+    private BigDecimal price;
 }
