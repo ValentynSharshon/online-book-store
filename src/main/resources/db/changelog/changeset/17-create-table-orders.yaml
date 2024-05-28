@@ -17,12 +17,11 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_orders_user
-                    referencedTableName: users
-                    referencedColumnNames: id
+                    foreignKeyName: fk_users_user_for_order
+                    references: users(id)
               - column:
                   name: status
-                  type: ENUM('DELIVERED','PENDING','COMPLETED')
+                  type: varchar(40)
                   constraints:
                     nullable: false
               - column:

@@ -1,17 +1,17 @@
 package com.gmail.woosay333.onlinebookstore.service.orderitem;
 
 import com.gmail.woosay333.onlinebookstore.dto.orderitem.OrderItemResponseDto;
-import com.gmail.woosay333.onlinebookstore.entity.Book;
-import com.gmail.woosay333.onlinebookstore.entity.Order;
+import com.gmail.woosay333.onlinebookstore.entity.CartItem;
 import com.gmail.woosay333.onlinebookstore.entity.OrderItem;
+import com.gmail.woosay333.onlinebookstore.entity.User;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import org.springframework.data.domain.Pageable;
 
 public interface OrderItemService {
-    Set<OrderItem> save(Order order, Map<Book, Integer> bookFromCartItem);
+    Set<OrderItem> convertFrom(Set<CartItem> cartItems);
 
-    List<OrderItemResponseDto> getAllOrderItems(Long orderId);
+    List<OrderItemResponseDto> findAllByOrder(Long orderId, User user, Pageable pageable);
 
-    OrderItemResponseDto getItem(Long orderId, Long itemId);
+    OrderItemResponseDto getById(Long id, Long orderId, User user);
 }
