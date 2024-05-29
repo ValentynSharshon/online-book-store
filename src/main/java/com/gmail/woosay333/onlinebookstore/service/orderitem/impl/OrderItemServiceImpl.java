@@ -30,12 +30,10 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public List<OrderItemResponseDto> findAllByOrder(Long orderId, User user, Pageable pageable) {
-        List<OrderItem> orderItems = orderItemRepository
-                .findAllByOrder_IdAndOrder_User(orderId, user, pageable);
+        List<OrderItem> orderItems =
+                orderItemRepository.findAllByOrder_IdAndOrder_User(orderId, user, pageable);
         if (orderItems.isEmpty()) {
-            throw new EntityNotFoundException(
-                    String.format("Can`t find order by id: %d",
-                            orderId));
+            throw new EntityNotFoundException("Can't find order by id: " + orderId);
         }
         return orderItems.stream()
                 .map(orderItemMapper::toDto)
@@ -44,12 +42,11 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemResponseDto getById(Long id, Long orderId, User user) {
-        OrderItem orderItem = orderItemRepository
-                .findByIdAndOrder_IdAndOrder_User(id, orderId, user)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Can`t find order by id: %d and order item by id: %d",
-                                orderId,
-                                id)));
+        OrderItem orderItem =
+                orderItemRepository.findByIdAndOrder_IdAndOrder_User(id, orderId, user).orElseThrow(
+                        () -> new EntityNotFoundException(
+                                "Can't find order by id: %s and orderItem id: %s"
+                                        .formatted(orderId, id)));
         return orderItemMapper.toDto(orderItem);
     }
 }

@@ -8,9 +8,7 @@ import java.util.Objects;
 public class FieldMatchValidator
         implements ConstraintValidator<FieldMatch, UserRegistrationRequestDto> {
     @Override
-    public boolean isValid(UserRegistrationRequestDto userRegistrationRequestDto,
-                           ConstraintValidatorContext context) {
-        return Objects.equals(userRegistrationRequestDto.getPassword(),
-                userRegistrationRequestDto.getRepeatPassword());
+    public boolean isValid(UserRegistrationRequestDto userDto, ConstraintValidatorContext context) {
+        return Objects.equals(userDto.password(), userDto.validatePassword());
     }
 }

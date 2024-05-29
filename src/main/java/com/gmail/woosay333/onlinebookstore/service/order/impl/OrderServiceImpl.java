@@ -3,7 +3,7 @@ package com.gmail.woosay333.onlinebookstore.service.order.impl;
 import com.gmail.woosay333.onlinebookstore.dto.order.OrderRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.order.OrderResponseDto;
 import com.gmail.woosay333.onlinebookstore.dto.orderitem.OrderItemResponseDto;
-import com.gmail.woosay333.onlinebookstore.dto.status.OrderStatusDto;
+import com.gmail.woosay333.onlinebookstore.dto.status.StatusDto;
 import com.gmail.woosay333.onlinebookstore.entity.CartItem;
 import com.gmail.woosay333.onlinebookstore.entity.Order;
 import com.gmail.woosay333.onlinebookstore.entity.ShoppingCart;
@@ -24,27 +24,27 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private final ShoppingCartRepository shoppingCartRepository;
-    private final OrderItemService orderItemService;
     private final OrderRepository orderRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
     private final OrderMapper orderMapper;
+    private final OrderItemService orderItemService;
 
     @Override
     @Transactional
     public OrderResponseDto saveOrder(OrderRequestDto requestDto, User user) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserWithCartItems(user)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Can`t find shopping cart from user: %s",
-                                user.getEmail())));
+        ShoppingCart shoppingCart =
+                shoppingCartRepository.findByUserWithCartItems(user).orElseThrow(
+                        () -> new EntityNotFoundException(
+                                "Can't find shopping cart from user: " + user.getEmail()));
         Set<CartItem> cartItems = shoppingCart.getCartItems();
         if (cartItems.isEmpty()) {
-            throw new EntityNotFoundException(
-                    String.format("Can`t find cart items from user: %s",
-                            user.getEmail()));
+            throw new EntityNotFoundException("Can't find cartItems from user: " + user.getEmail());
         }
+
         shoppingCartRepository.deleteById(shoppingCart.getId());
-        Order order = orderMapper
-                .toModel(requestDto, user, orderItemService.convertFrom(cartItems));
+
+        Order order =
+                orderMapper.toModel(requestDto, user, orderItemService.convertFrom(cartItems));
         Order savedOrder = orderRepository.save(order);
         return orderMapper.toDto(savedOrder);
     }
@@ -59,11 +59,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void updateStatus(Long id, OrderStatusDto statusDto) {
+    public void updateStatus(Long id, StatusDto statusDto) {
         if (orderRepository.updateStatusById(id, statusDto.status()) < 1) {
-            throw new EntityNotFoundException(
-                    String.format("Can`t find order by id: %d",
-                            id));
+            throw new EntityNotFoundException("Can't find order by id: " + id);
         }
     }
 

@@ -1,17 +1,16 @@
 package com.gmail.woosay333.onlinebookstore.dto.category;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.Builder;
 
-@Data
-public class CategoryResponseDto {
-    @Schema(example = "56")
-    private Long id;
-
-    @Schema(example = "Fantasy")
-    private String name;
-
-    @Schema(example = "This books genre is characterized by elements of magic "
-            + "or the supernatural and is often inspired by mythology or folklore")
-    private String description;
+@Builder
+public record CategoryResponseDto(
+        @Schema(example = "12")
+        Long id,
+        @Schema(example = "Fiction")
+        String name,
+        @Schema(example = "Here should be some description of the category",
+                nullable = true)
+        String description
+) {
 }

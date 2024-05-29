@@ -1,16 +1,20 @@
 package com.gmail.woosay333.onlinebookstore.controller;
 
+import com.gmail.woosay333.onlinebookstore.dto.cart.item.CartItemRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.cart.item.CartItemResponseDto;
-import com.gmail.woosay333.onlinebookstore.dto.cart.item.CreateCartItemRequestDto;
-import com.gmail.woosay333.onlinebookstore.dto.cart.item.UpdateCartItemRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.quantity.QuantityDto;
 import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.ShoppingCartDto;
 import com.gmail.woosay333.onlinebookstore.entity.User;
 import com.gmail.woosay333.onlinebookstore.service.shopping.cart.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,53 +27,83 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Shopping Cart management.",
+        description = "Endpoints for managing Shopping Carts.")
 @RestController
 @RequestMapping("/cart")
 @RequiredArgsConstructor
-@Tag(name = "Shopping Cart management.",
-        description = "Endpoints for managing Shopping Carts.")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get a shopping cart.",
-            description = "Retrieve the user's shopping cart from DB.")
+    @Operation(summary = "Return shopping cart",
+            description = "Return shopping cart authenticated user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    })
     public ShoppingCartDto getShoppingCart(@AuthenticationPrincipal User user) {
-        return shoppingCartService.getShoppingCart(user.getId());
+        return shoppingCartService.getShoppingCartWithCartItems(user);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Add new item to a cart.",
-            description = "Save a new item to the user's shopping cart through DB.")
-    public CartItemResponseDto addToCart(@RequestBody @Valid CreateCartItemRequestDto request,
-                                         @AuthenticationPrincipal User user) {
-        return shoppingCartService.addToCart(request, user);
-    }
-
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @PutMapping("/cart-items/{cartItemId}")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Update a cart item.",
-            description = "Update an existing cart item in the user's shopping cart by its ID.")
-    public CartItemResponseDto updateCartItem(
-            @PathVariable Long cartItemId,
-            @RequestBody @Valid UpdateCartItemRequestDto requestDto,
+    @Operation(summary = "Add new cart item to cart",
+            description = "Add new cart item to user`s cart")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully added"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    })
+    public CartItemResponseDto addCartItem(
+            @RequestBody CartItemRequestDto requestDto,
             @AuthenticationPrincipal User user
     ) {
-        return shoppingCartService.updateCartItem(cartItemId, requestDto, user.getId());
+        return shoppingCartService.addCartItem(requestDto, user);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/cart-items/{cartItemId}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(summary = "Update cart item quantity by ID",
+            description = "Update cart item quantity by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    })
+    public QuantityDto updateCartItem(
+            @PathVariable Long cartItemId,
+            @RequestBody QuantityDto quantityDto,
+            @AuthenticationPrincipal User user
+    ) {
+        return shoppingCartService.updateCartItem(cartItemId, quantityDto, user);
+    }
+
     @DeleteMapping("/cart-items/{cartItemId}")
-    @Operation(summary = "Delete a cart item.",
-            description = "Delete the item from the user's shopping cart in DB by its ID.")
-    public void deleteCartItem(@PathVariable Long cartItemId,
-                               @AuthenticationPrincipal User user) {
-        shoppingCartService.deleteCartItem(user.getId(), cartItemId);
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete a cart item by ID",
+            description = "Delete a cart item by ID if exist")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "No content - successfully deleted"),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "404", description = "Not found - wrong id",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    })
+    public void deleteCartItem(
+            @PathVariable Long cartItemId,
+            @AuthenticationPrincipal User user
+    ) {
+        shoppingCartService.removeCartItem(cartItemId, user);
     }
 }

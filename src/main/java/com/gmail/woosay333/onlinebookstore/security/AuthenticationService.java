@@ -14,10 +14,10 @@ public class AuthenticationService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
-    public UserLoginResponseDto authenticate(UserLoginRequestDto userLoginRequestDto) {
+    public UserLoginResponseDto authenticate(UserLoginRequestDto requestDto) {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userLoginRequestDto.email(), userLoginRequestDto.password()));
+                        requestDto.email(), requestDto.password()));
 
         String generatedToken = jwtUtil.generateToken(authentication.getName());
         return new UserLoginResponseDto(generatedToken);

@@ -11,11 +11,6 @@ import org.mapstruct.ReportingPolicy;
         uses = CartItemMapper.class,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ShoppingCartMapper {
-    @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "cartItems", target = "cartItems")
+    @Mapping(target = "userId", source = "user.id")
     ShoppingCartDto toDto(ShoppingCart shoppingCart);
-
-    @Mapping(source = "userId", target = "user.id")
-    @Mapping(source = "cartItems", target = "cartItems")
-    ShoppingCart toModel(ShoppingCartDto shoppingCartDto);
 }

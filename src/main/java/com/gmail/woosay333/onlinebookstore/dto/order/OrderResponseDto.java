@@ -7,15 +7,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record OrderResponseDto(
-        @Schema(example = "25")
+        @Schema(example = "25", nullable = true)
         Long id,
-        @Schema(example = "15")
+        @Schema(example = "15", nullable = true)
         Long userId,
+        @Schema(nullable = true)
         List<OrderItemResponseDto> orderItems,
+        @Schema(nullable = true)
         LocalDateTime orderDate,
-        @Schema(example = "19.99")
+        @Schema(example = "165.28", nullable = true)
         BigDecimal total,
-        @Schema(example = "DELIVERED")
+        @Schema(example = "DELIVERED", nullable = true)
         String status
 ) {
 }

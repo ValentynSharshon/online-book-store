@@ -2,11 +2,11 @@ package com.gmail.woosay333.onlinebookstore.service.book.impl;
 
 import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
-import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
+import com.gmail.woosay333.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
-import com.gmail.woosay333.onlinebookstore.exception.BookIsbnAlreadyExistsException;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
+import com.gmail.woosay333.onlinebookstore.exception.UniqueIsbnException;
 import com.gmail.woosay333.onlinebookstore.mapper.BookMapper;
 import com.gmail.woosay333.onlinebookstore.repository.book.BookRepository;
 import com.gmail.woosay333.onlinebookstore.repository.book.BookSpecificationBuilder;
@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,90 +28,93 @@ public class BookServiceImpl implements BookService {
     private final BookSpecificationBuilder bookSpecificationBuilder;
     private final CategoryService categoryService;
 
+    @Transactional
     @Override
-    public BookDto create(BookRequestDto bookRequestDto) {
-        bookIsbnAlreadyExistsCheck(bookRequestDto.getIsbn());
-        bookCategoriesAreExist(bookRequestDto);
+    public BookDto save(CreateBookRequestDto bookRequestDto) {
+        if (bookRepository.findByIsbn(bookRequestDto.isbn()).isPresent()) {
+            throw new UniqueIsbnException("Non uniq ISBN: " + bookRequestDto.isbn());
+        }
+        validateCategories(bookRequestDto);
         Book book = bookMapper.toModel(bookRequestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
-    public BookDto findById(Long id) {
-        Book book = bookRepository.findByIdWithCategories(id).orElseThrow(
-                () -> new EntityNotFoundException(
-                        String.format("Can`t find a book with id: %d", id)
-                ));
-        return bookMapper.toDto(book);
-    }
-
-    @Override
-    public List<BookDto> findAll(Pageable pageable) {
-        return bookRepository.findAllWithCategories(pageable)
-                .stream()
+    public List<BookDto> getAll(Pageable pageable) {
+        return bookRepository.findAllBooks(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
 
     @Override
-    public BookDto update(Long id, BookRequestDto bookRequestDto) {
-        if (!bookRepository.existsById(id)) {
-            throw new EntityNotFoundException(String.format("Can`t find Book with id: %d", id));
-        }
-        bookIsbnAlreadyExistsCheck(bookRequestDto.getIsbn());
-        bookCategoriesAreExist(bookRequestDto);
-        Book book = bookMapper.toModel(bookRequestDto);
-        book.setId(id);
-        return bookMapper.toDto(bookRepository.save(book));
+    public BookDto getById(Long id) {
+        return bookMapper.toDto(getBook(id));
     }
 
     @Override
-    public void delete(Long id) {
-        bookRepository.deleteById(id);
+    public Book getBook(Long id) {
+        return bookRepository.findByIdWithCategories(id).orElseThrow(
+                () -> new EntityNotFoundException("Book not found by id " + id));
     }
 
     @Override
-    public List<BookDto> search(
-            BookSearchParameters bookSearchParameters,
-            Pageable pageable
-    ) {
-        Specification<Book> bookSpecification = bookSpecificationBuilder
-                .build(bookSearchParameters);
+    public List<BookDto> getByParameters(
+            BookSearchParameters bookSearchParameters, Pageable pageable) {
+        Specification<Book> bookSpecification =
+                bookSpecificationBuilder.build(bookSearchParameters);
         return bookRepository.findAll(bookSpecification, pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
 
+    @Transactional
+    @Override
+    public BookDto update(Long id, CreateBookRequestDto bookRequestDto) {
+        validateIsbnUniqueness(id, bookRequestDto);
+
+        Book book = bookMapper.toModel(bookRequestDto);
+        book.setId(id);
+        return bookMapper.toDto(bookRepository.save(book));
+    }
+
+    @Transactional
+    @Override
+    public void delete(Long id) {
+        if (bookRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("Can't find book to delete by id " + id);
+        }
+        bookRepository.deleteById(id);
+    }
+
     @Override
     public List<BookDtoWithoutCategoryIds> getByCategoryId(Long id, Pageable pageable) {
-        return bookRepository.findByCategoriesId(id, pageable)
-                .stream()
-                .map(bookMapper::toDtoWithoutCategoryIds)
+        return bookRepository.findAllByCategories_Id(id, pageable).stream()
+                .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 
-    private void bookIsbnAlreadyExistsCheck(String isbn) {
-        boolean isBookExists = bookRepository.existsBookByIsbn(isbn);
-        if (isBookExists) {
-            throw new BookIsbnAlreadyExistsException(
-                    String.format("Book with isbn: %s already exists", isbn)
-            );
+    private void validateIsbnUniqueness(Long id, CreateBookRequestDto bookRequestDto) {
+        List<Book> allByIdOrIsbn = bookRepository.findAllByIdOrIsbn(id, bookRequestDto.isbn());
+        if (allByIdOrIsbn.size() > 1) {
+            throw new UniqueIsbnException("Book with ISBN "
+                    + bookRequestDto.isbn() + " already exist");
         }
+
+        if (allByIdOrIsbn.isEmpty() || !allByIdOrIsbn.getFirst().getId().equals(id)) {
+            throw new EntityNotFoundException("Can't find book to update by id " + id);
+        }
+
+        validateCategories(bookRequestDto);
     }
 
-    private void bookCategoriesAreExist(BookRequestDto bookRequestDto) {
-        Set<Long> requestCategoryIds = bookRequestDto.getCategoryIds();
-        Set<Long> categoryIdsFromDb = categoryService
-                .getAllExistedCategoryIdsFromIds(requestCategoryIds);
-        if (!categoryIdsFromDb.containsAll(requestCategoryIds)) {
-            List<Long> nonExistedCategoriesIds = requestCategoryIds.stream()
+    private void validateCategories(CreateBookRequestDto bookRequestDto) {
+        Set<Long> categoryIds = bookRequestDto.categoryIds();
+        Set<Long> categoryIdsFromDb = categoryService.getAllExistedCategoryIdsFromIds(categoryIds);
+        if (categoryIdsFromDb.size() < categoryIds.size()) {
+            List<Long> notExistedIds = categoryIds.stream()
                     .filter(id -> !categoryIdsFromDb.contains(id))
                     .toList();
-            throw new EntityNotFoundException(
-                    String.format(
-                            "Can't find categories with ids: %s",
-                            nonExistedCategoriesIds
-                    ));
+            throw new EntityNotFoundException("Can't find categories with ids: " + notExistedIds);
         }
     }
 }

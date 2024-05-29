@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(config = MapperConfig.class, uses = OrderItemMapper.class)
+@Mapper(config = MapperConfig.class,
+        uses = OrderItemMapper.class)
 public interface OrderMapper {
     @Mapping(target = "userId", source = "user.id")
     OrderResponseDto toDto(Order order);
@@ -23,7 +24,7 @@ public interface OrderMapper {
         Order order = new Order();
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
-        order.setTotal(calculateTotalPrice(user, orderItems));
+        order.setTotal(getTotalPrice(user, orderItems));
         order.setShippingAddress(requestDto.shippingAddress());
         order.setStatus(Status.PENDING);
         order.setOrderItems(orderItems.stream()
@@ -32,15 +33,13 @@ public interface OrderMapper {
         return order;
     }
 
-    private BigDecimal calculateTotalPrice(User user, Set<OrderItem> orderItems) {
+    private BigDecimal getTotalPrice(User user, Set<OrderItem> orderItems) {
         return orderItems.stream()
-                .map(cartItem -> cartItem
-                        .getBook()
-                        .getPrice()
-                        .multiply(BigDecimal.valueOf(cartItem.getQuantity())))
+                .map(cartItem -> cartItem.getBook().getPrice().multiply(
+                        BigDecimal.valueOf(cartItem.getQuantity())))
                 .reduce(BigDecimal::add)
                 .orElseThrow(() -> new ArithmeticException(
-                        String.format("Can`t calculate total price for user: %s order",
-                                user.getEmail())));
+                        "Can't calculate total sum for user order. User: "
+                                + user.getEmail()));
     }
 }

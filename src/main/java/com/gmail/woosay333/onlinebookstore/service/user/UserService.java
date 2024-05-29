@@ -5,5 +5,6 @@ import com.gmail.woosay333.onlinebookstore.dto.user.UserResponseDto;
 import com.gmail.woosay333.onlinebookstore.exception.RegistrationException;
 
 public interface UserService {
-    UserResponseDto register(UserRegistrationRequestDto dto) throws RegistrationException;
+    UserResponseDto register(UserRegistrationRequestDto userRequestDto) throws
+            RegistrationException;
 }

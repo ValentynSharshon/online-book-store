@@ -1,11 +1,15 @@
 package com.gmail.woosay333.onlinebookstore.dto.cart.item;
 
-import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@Data
-public class CartItemResponseDto {
-    private Long id;
-    private String bookTitle;
-    private Long bookId;
-    private int quantity;
+public record CartItemResponseDto(
+        @Schema(example = "25", nullable = true)
+        Long id,
+        @Schema(example = "15", nullable = true)
+        Long bookId,
+        @Schema(example = "Title example", nullable = true)
+        String bookTitle,
+        @Schema(example = "10", nullable = true)
+        int quantity
+) {
 }
