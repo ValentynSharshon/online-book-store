@@ -13,23 +13,29 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+@Getter
+@Setter
 @Entity
-@Table(name = "books")
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id = ?")
-@SQLRestriction("is_deleted = false")
-@NoArgsConstructor
-@Data
+@SQLRestriction(value = "is_deleted = false")
+@Table(name = "books")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "books_categories",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories = new HashSet<>();
 
     @Column(nullable = false)
     private String title;
@@ -37,7 +43,8 @@ public class Book {
     @Column(nullable = false)
     private String author;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false,
+            unique = true)
     private String isbn;
 
     @Column(nullable = false)
@@ -46,19 +53,4 @@ public class Book {
     private String description;
 
     private String coverImage;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "books_categories",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<Category> categories = new HashSet<>();
-
-    @Column(nullable = false)
-    private boolean isDeleted = false;
-
-    public Book(Long id) {
-        this.id = id;
-    }
 }

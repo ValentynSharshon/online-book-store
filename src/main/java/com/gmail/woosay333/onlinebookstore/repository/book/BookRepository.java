@@ -12,16 +12,19 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
-    boolean existsBookByIsbn(String isbn);
+    Optional<Book> findByIsbn(String isbn);
 
-    List<Book> findByCategoriesId(Long categoryId, Pageable pageable);
+    @Query("FROM Book b JOIN FETCH b.categories WHERE b.id = :id")
+    Optional<Book> findByIdWithCategories(Long id);
 
     @EntityGraph(attributePaths = {"categories"})
     Page<Book> findAll(Specification<Book> specification, Pageable pageable);
 
-    @Query("FROM Book b LEFT JOIN FETCH b.categories")
-    List<Book> findAllWithCategories(Pageable pageable);
+    @Query("FROM Book b JOIN FETCH b.categories")
+    List<Book> findAllBooks(Pageable pageable);
 
-    @Query("FROM Book b LEFT JOIN FETCH b.categories WHERE b.id = :id")
-    Optional<Book> findByIdWithCategories(Long id);
+    @EntityGraph(attributePaths = {"categories"})
+    List<Book> findAllByCategories_Id(Long categoryId, Pageable pageable);
+
+    List<Book> findAllByIdOrIsbn(Long id, String isbn);
 }

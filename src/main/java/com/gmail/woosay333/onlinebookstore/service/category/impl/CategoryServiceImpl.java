@@ -21,50 +21,47 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
-    public CategoryResponseDto save(CategoryRequestDto categoryRequestDto) {
-        Category category = categoryRepository.save(categoryMapper.toModel(categoryRequestDto));
-        return categoryMapper.toDto(category);
-    }
-
-    @Override
     public List<CategoryResponseDto> findAll(Pageable pageable) {
-        return categoryMapper.toDtoList(categoryRepository.findAll());
+        return categoryRepository.findAll(pageable).stream()
+                .map(categoryMapper::toResponseDto)
+                .toList();
     }
 
     @Override
-    public CategoryResponseDto findById(Long id) {
-        return categoryMapper.toDto(categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Can`t find a category with id: %d", id)
-                )));
+    public CategoryResponseDto getById(Long id) {
+        return categoryMapper.toResponseDto(
+                categoryRepository.findById(id).orElseThrow(
+                        () -> new EntityNotFoundException("Can't find category by id:" + id)));
     }
 
     @Override
-    public CategoryResponseDto update(Long id, CategoryRequestDto categoryRequestDto) {
-        isCategoryExist(id);
-        Category category = categoryMapper.toModel(categoryRequestDto);
+    public CategoryResponseDto save(CategoryRequestDto categoryDto) {
+        Category category = categoryMapper.toModel(categoryDto);
+        return categoryMapper.toResponseDto(categoryRepository.save(category));
+    }
+
+    @Override
+    public CategoryResponseDto update(Long id, CategoryRequestDto categoryDto) {
+        if (!categoryRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find category by id " + id);
+        }
+        Category category = categoryMapper.toModel(categoryDto);
         category.setId(id);
-        return categoryMapper.toDto(categoryRepository.save(category));
+        return categoryMapper.toResponseDto(categoryRepository.save(category));
     }
 
     @Override
-    public void delete(Long id) {
-        isCategoryExist(id);
+    public void deleteById(Long id) {
+        if (categoryRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("Can't find category to delete by id " + id);
+        }
         categoryRepository.deleteById(id);
     }
 
     @Override
-    public Set<Long> getAllExistedCategoryIdsFromIds(Set<Long> categoryIds) {
-        return categoryRepository.findAllByIdIn(categoryIds)
-                .stream().map(Category::getId)
+    public Set<Long> getAllExistedCategoryIdsFromIds(Set<Long> ids) {
+        return categoryRepository.findAllByIdIn(ids).stream()
+                .map(Category::getId)
                 .collect(Collectors.toSet());
-    }
-
-    private void isCategoryExist(Long id) {
-        if (!categoryRepository.existsCategoryById(id)) {
-            throw new EntityNotFoundException(
-                    String.format("Can`t find a category with id: %d", id)
-            );
-        }
     }
 }

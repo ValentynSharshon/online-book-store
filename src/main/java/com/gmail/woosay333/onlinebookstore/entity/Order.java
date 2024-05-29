@@ -13,9 +13,8 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -23,11 +22,12 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.type.SqlTypes;
 
+@Setter
+@Getter
 @Entity
-@Table(name = "orders")
-@Data
 @SQLDelete(sql = "UPDATE orders SET is_deleted = true WHERE id = ?")
 @SQLRestriction(value = "is_deleted = false")
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +35,6 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private User user;
 
     @Column(nullable = false)
@@ -54,7 +52,5 @@ public class Order {
 
     @Cascade({CascadeType.PERSIST, CascadeType.REMOVE})
     @OneToMany(mappedBy = "order")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private Set<OrderItem> orderItems;
 }

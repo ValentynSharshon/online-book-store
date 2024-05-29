@@ -5,9 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record OrderRequestDto(
-        @NotBlank(message = "Value of the Shipping Address field can't be null or empty")
-        @Size(max = 255, message = "The length of the Shipping Address field "
-                + "cannot be longer than 255 characters")
+        @NotBlank
+        @Size(min = 3, max = 255)
         @Schema(example = "37173 Ritchie Parks, Goodwinville, AK 94927, USA")
         String shippingAddress
 ) {

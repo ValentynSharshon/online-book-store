@@ -19,13 +19,13 @@ public @interface FieldMatch {
 
     Class<? extends Payload>[] payload() default {};
 
-    String first();
+    String field();
 
-    String second();
+    String fieldMatch();
 
+    @Documented
     @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
-    @Documented
     @interface List {
         FieldMatch[] value();
     }

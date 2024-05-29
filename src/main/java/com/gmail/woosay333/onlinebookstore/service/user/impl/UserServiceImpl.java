@@ -13,6 +13,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,14 +23,17 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
+    @Transactional
     @Override
-    public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)
-            throws RegistrationException {
-        if (userRepository.existsUserByEmail(userRegistrationRequestDto.getEmail())) {
-            throw new RegistrationException(String.format("User with email %s already exists",
-                            userRegistrationRequestDto.getEmail()));
+    public UserResponseDto register(UserRegistrationRequestDto userRequestDto) throws
+            RegistrationException {
+
+        if (userRepository.findByEmail(userRequestDto.email()).isPresent()) {
+            throw new RegistrationException(
+                    "User already exist with email " + userRequestDto.email());
         }
-        User user = userMapper.toModel(userRegistrationRequestDto);
+
+        User user = userMapper.toModel(userRequestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEmail(user.getEmail().toLowerCase());
         user.setRoles(roleRepository.getAllByNameIn(Set.of(RoleName.ROLE_USER)));

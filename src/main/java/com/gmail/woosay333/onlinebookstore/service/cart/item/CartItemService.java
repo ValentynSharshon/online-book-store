@@ -1,13 +1,14 @@
 package com.gmail.woosay333.onlinebookstore.service.cart.item;
 
-import com.gmail.woosay333.onlinebookstore.dto.cart.item.CreateCartItemRequestDto;
-import com.gmail.woosay333.onlinebookstore.entity.CartItem;
+import com.gmail.woosay333.onlinebookstore.dto.cart.item.CartItemRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.cart.item.CartItemResponseDto;
+import com.gmail.woosay333.onlinebookstore.dto.quantity.QuantityDto;
 import com.gmail.woosay333.onlinebookstore.entity.ShoppingCart;
 
 public interface CartItemService {
-    CartItem save(CreateCartItemRequestDto cartItemRequestDto, ShoppingCart shoppingCart);
+    CartItemResponseDto add(CartItemRequestDto cartItemRequestDto, ShoppingCart shoppingCart);
 
-    CartItem update(CartItem cartItem);
+    QuantityDto changeQuantity(Long id, QuantityDto quantityDto, ShoppingCart shoppingCart);
 
-    void delete(CartItem cartItem);
+    void remove(Long id, ShoppingCart shoppingCart);
 }

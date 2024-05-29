@@ -6,12 +6,19 @@ import com.gmail.woosay333.onlinebookstore.dto.category.CategoryResponseDto;
 import com.gmail.woosay333.onlinebookstore.service.book.BookService;
 import com.gmail.woosay333.onlinebookstore.service.category.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,67 +30,115 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Book management",
+        description = "Endpoints for managing categories")
 @RestController
 @RequestMapping("/categories")
 @RequiredArgsConstructor
-@Tag(name = "Book management.", description = "Endpoints for managing categories.")
 public class CategoryController {
     private final CategoryService categoryService;
     private final BookService bookService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Create a new category.",
-            description = "Create a new category and save to the database.")
-    public CategoryResponseDto create(@RequestBody @Valid CategoryRequestDto categoryRequestDto) {
-        return categoryService.save(categoryRequestDto);
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create a new category",
+            description = "Create a new category")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "403", description = "Not enough access rights",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    })
+    public CategoryResponseDto createCategory(@RequestBody @Valid CategoryRequestDto categoryDto) {
+        return categoryService.save(categoryDto);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get a page of categories.",
-            description = "Get a page of categories with pagination and sorting.")
-    public List<CategoryResponseDto> getAll(Pageable pageable) {
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Return all of categories",
+            description = "Return all of categories")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+    })
+    public List<CategoryResponseDto> getAll(
+            @ParameterObject @PageableDefault(sort = "name", value = 5) Pageable pageable
+    ) {
         return categoryService.findAll(pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get a single category by id.",
-            description = "Get a single category by id.")
-    public CategoryResponseDto getById(@PathVariable Long id) {
-        return categoryService.findById(id);
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Return category",
+            description = "Return single category by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+    })
+    public CategoryResponseDto getCategoryById(@PathVariable Long id) {
+        return categoryService.getById(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @Operation(summary = "Update a category by id.",
-            description = "Update a category if exists by its id")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public CategoryResponseDto update(
+    @Operation(summary = "Update a category",
+            description = "Update a category if exist")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "403", description = "Not enough access rights",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    })
+    public CategoryResponseDto updateCategory(
             @PathVariable Long id,
-            @RequestBody @Valid CategoryRequestDto categoryRequestDto
+            @RequestBody @Valid CategoryRequestDto categoryDto
     ) {
-        return categoryService.update(id, categoryRequestDto);
+        return categoryService.update(id, categoryDto);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Delete a category by id.",
-            description = "Delete a category by id with soft delete.")
-    public void delete(@PathVariable Long id) {
-        categoryService.delete(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete a category by id",
+            description = "Delete a category by id if exist")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "No content - successfully deleted"),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "403", description = "Not enough access rights",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "404", description = "Not found - wrong id",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    })
+    public void deleteCategory(@PathVariable Long id) {
+        categoryService.deleteById(id);
     }
 
     @GetMapping("/{id}/books")
-    @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Returns a single page of books.",
-            description = "Return filtered page of books by category with pagination and sorting.")
-    public List<BookDtoWithoutCategoryIds> getByCategoryId(
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Return page of books by category",
+            description = "Return page of books with pagination and sorting by category ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "Required authorization",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+    })
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
             @PathVariable Long id,
-            Pageable pageable
+            @ParameterObject @PageableDefault(sort = "title", value = 5) Pageable pageable
     ) {
         return bookService.getByCategoryId(id, pageable);
     }

@@ -1,21 +1,17 @@
 package com.gmail.woosay333.onlinebookstore.service.shopping.cart;
 
+import com.gmail.woosay333.onlinebookstore.dto.cart.item.CartItemRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.cart.item.CartItemResponseDto;
-import com.gmail.woosay333.onlinebookstore.dto.cart.item.CreateCartItemRequestDto;
-import com.gmail.woosay333.onlinebookstore.dto.cart.item.UpdateCartItemRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.quantity.QuantityDto;
 import com.gmail.woosay333.onlinebookstore.dto.shopping.cart.ShoppingCartDto;
 import com.gmail.woosay333.onlinebookstore.entity.User;
 
 public interface ShoppingCartService {
-    ShoppingCartDto getShoppingCart(Long userId);
+    ShoppingCartDto getShoppingCartWithCartItems(User user);
 
-    CartItemResponseDto addToCart(CreateCartItemRequestDto request,
-                                  User user);
+    QuantityDto updateCartItem(Long cartItemId, QuantityDto quantityDto, User user);
 
-    CartItemResponseDto updateCartItem(Long cartItemId,
-                                       UpdateCartItemRequestDto request,
-                                       Long userId);
+    void removeCartItem(Long cartItemId, User user);
 
-    void deleteCartItem(Long userId,
-                        Long cartItemId);
+    CartItemResponseDto addCartItem(CartItemRequestDto requestDto, User user);
 }

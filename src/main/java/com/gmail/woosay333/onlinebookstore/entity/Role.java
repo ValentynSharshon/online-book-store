@@ -21,7 +21,8 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false,
+            unique = true)
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
