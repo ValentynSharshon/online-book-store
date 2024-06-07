@@ -36,7 +36,7 @@ public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return shopping cart",
             description = "Return shopping cart authenticated user")
@@ -46,11 +46,11 @@ public class ShoppingCartController {
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ShoppingCartDto getShoppingCart(@AuthenticationPrincipal User user) {
-        return shoppingCartService.getShoppingCartWithCartItems(user);
+        return shoppingCartService.getShoppingCart(user);
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add new cart item to cart",
             description = "Add new cart item to user`s cart")
@@ -69,7 +69,7 @@ public class ShoppingCartController {
     }
 
     @PutMapping("/cart-items/{cartItemId}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "Update cart item quantity by ID",
             description = "Update cart item quantity by ID")
@@ -89,7 +89,7 @@ public class ShoppingCartController {
     }
 
     @DeleteMapping("/cart-items/{cartItemId}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete a cart item by ID",
             description = "Delete a cart item by ID if exist")
@@ -104,6 +104,6 @@ public class ShoppingCartController {
             @PathVariable Long cartItemId,
             @AuthenticationPrincipal User user
     ) {
-        shoppingCartService.removeCartItem(cartItemId, user);
+        shoppingCartService.deleteCartItem(cartItemId, user);
     }
 }

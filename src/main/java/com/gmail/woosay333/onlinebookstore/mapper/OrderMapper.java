@@ -39,7 +39,7 @@ public interface OrderMapper {
                         BigDecimal.valueOf(cartItem.getQuantity())))
                 .reduce(BigDecimal::add)
                 .orElseThrow(() -> new ArithmeticException(
-                        "Can't calculate total sum for user order. User: "
-                                + user.getEmail()));
+                        String.format("Can't calculate total sum for user order. User: %s",
+                                user.getEmail())));
     }
 }

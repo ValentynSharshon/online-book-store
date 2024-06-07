@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record CategoryResponseDto(
-        @Schema(example = "12")
+        @Schema(example = "10")
         Long id,
         @Schema(example = "Fiction")
         String name,

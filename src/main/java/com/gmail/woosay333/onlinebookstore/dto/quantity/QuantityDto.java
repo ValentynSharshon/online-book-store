@@ -7,7 +7,8 @@ import jakarta.validation.constraints.NotEmpty;
 public record QuantityDto(
         @NotEmpty
         @Min(value = 0)
-        @Schema(example = "10", nullable = true)
+        @Schema(example = "10",
+                nullable = true)
         int quantity
 ) {
 }

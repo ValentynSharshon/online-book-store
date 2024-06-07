@@ -15,12 +15,12 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-@Setter
-@Getter
-@SQLDelete(sql = "UPDATE order_items SET is_deleted = true WHERE id = ?")
-@SQLRestriction(value = "is_deleted = false")
 @Entity
 @Table(name = "order_items")
+@SQLDelete(sql = "UPDATE order_items SET is_deleted = true WHERE id = ?")
+@SQLRestriction(value = "is_deleted = false")
+@Setter
+@Getter
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

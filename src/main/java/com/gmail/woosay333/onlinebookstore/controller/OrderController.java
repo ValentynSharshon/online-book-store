@@ -40,7 +40,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create an order",
             description = "Create an order from user`s cart")
@@ -55,11 +55,11 @@ public class OrderController {
             @RequestBody @Valid OrderRequestDto requestDto,
             @AuthenticationPrincipal User user
     ) {
-        return orderService.saveOrder(requestDto, user);
+        return orderService.createOrder(requestDto, user);
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all orders",
             description = "Get all user`s orders")
@@ -72,11 +72,11 @@ public class OrderController {
             @AuthenticationPrincipal User user,
             @ParameterObject @PageableDefault(sort = "orderDate", value = 5) Pageable pageable
     ) {
-        return orderService.getAllOrders(user, pageable);
+        return orderService.getOrderHistory(user, pageable);
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "Update order status",
             description = "Update order status by ID")
@@ -97,7 +97,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}/items")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return all cart items from certain order",
             description = "Return all cart items from certain order by order ID")
@@ -111,11 +111,11 @@ public class OrderController {
             @AuthenticationPrincipal User user,
             @ParameterObject @PageableDefault(sort = "id", value = 5) Pageable pageable
     ) {
-        return orderService.getAllCartItems(orderId, user, pageable);
+        return orderService.getAllOrderItems(orderId, user, pageable);
     }
 
     @GetMapping("/{orderId}/items/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return specific cart item from certain order",
             description = "Return cart item by ID from certain order by order ID")
@@ -129,6 +129,6 @@ public class OrderController {
             @PathVariable Long orderId,
             @AuthenticationPrincipal User user
     ) {
-        return orderService.getCartItem(id, orderId, user);
+        return orderService.getOrderItem(id, orderId, user);
     }
 }

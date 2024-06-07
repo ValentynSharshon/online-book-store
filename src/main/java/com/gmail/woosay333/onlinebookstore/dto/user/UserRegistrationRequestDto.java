@@ -15,25 +15,25 @@ import org.hibernate.validator.constraints.Length;
 public record UserRegistrationRequestDto(
         @NotBlank
         @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
-        @Schema(example = "example@example.com")
+        @Schema(example = "example@email.com")
         String email,
         @NotBlank
-        @Length(min = 5, max = 24)
-        @Schema(example = "passExample123")
+        @Length(min = 5, max = 255)
+        @Schema(example = "passwordExample")
         String password,
         @NotBlank
-        @Length(min = 5, max = 24)
-        @Schema(example = "passExample123")
+        @Length(min = 5, max = 255)
+        @Schema(example = "passwordExample")
         String validatePassword,
         @NotBlank
-        @Length(min = 3, max = 24)
+        @Length(min = 2, max = 24)
         @Pattern(regexp = "\\S*", message = "Field shouldn't include spaces")
         @Pattern(regexp = "[A-ZА-Я][a-zа-я]*",
                 message = "Field should contain only first letter as capital")
         @Schema(example = "Example")
         String firstName,
         @NotBlank
-        @Length(min = 3, max = 24)
+        @Length(min = 2, max = 24)
         @Pattern(regexp = "\\S*", message = "Field shouldn't include spaces")
         @Pattern(regexp = "[A-ZА-Я][a-zа-я]*",
                 message = "Field should contain only first letter as capital")

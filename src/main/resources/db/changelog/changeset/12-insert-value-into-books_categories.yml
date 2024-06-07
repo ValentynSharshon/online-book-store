@@ -1,0 +1,95 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-values-into-books_categories
+      author: Valentyn Sharshon
+      changes:
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: (SELECT id FROM books WHERE isbn = '9780590353427')
+              - column:
+                  name: category_id
+                  valueComputed: (SELECT id FROM categories WHERE name = 'Fantasy')
+        - insert:
+              tableName: books_categories
+              columns:
+                - column:
+                    name: book_id
+                    valueComputed: (SELECT id FROM books WHERE isbn = '9780439064873')
+                - column:
+                    name: category_id
+                    valueComputed: (SELECT id FROM categories WHERE name = 'Fantasy')
+        - insert:
+              tableName: books_categories
+              columns:
+                - column:
+                    name: book_id
+                    valueComputed: (SELECT id FROM books WHERE isbn = '9780439136365')
+                - column:
+                    name: category_id
+                    valueComputed: (SELECT id FROM categories WHERE name = 'Fantasy')
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: (SELECT id FROM books WHERE isbn = '9780439139601')
+              - column:
+                  name: category_id
+                  valueComputed: (SELECT id FROM categories WHERE name = 'Fantasy')
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: (SELECT id FROM books WHERE isbn = '9780439358071')
+              - column:
+                  name: category_id
+                  valueComputed: (SELECT id FROM categories WHERE name = 'Fantasy')
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: (SELECT id FROM books WHERE isbn = '9780547928227')
+              - column:
+                  name: category_id
+                  valueComputed: (SELECT id FROM categories WHERE name = 'Fantasy')
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: (SELECT id FROM books WHERE isbn = '9780547928210')
+              - column:
+                  name: category_id
+                  valueComputed: (SELECT id FROM categories WHERE name = 'Fantasy')
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: (SELECT id FROM books WHERE isbn = '9780544003415')
+              - column:
+                  name: category_id
+                  valueComputed: (SELECT id FROM categories WHERE name = 'Fantasy')
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: (SELECT id FROM books WHERE isbn = '9780486264783')
+              - column:
+                  name: category_id
+                  valueComputed: (SELECT id FROM categories WHERE name = 'Novel')
+        - insert:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  valueComputed: (SELECT id FROM books WHERE isbn = '9780141439693')
+              - column:
+                  name: category_id
+                  valueComputed: (SELECT id FROM categories WHERE name = 'Novel')

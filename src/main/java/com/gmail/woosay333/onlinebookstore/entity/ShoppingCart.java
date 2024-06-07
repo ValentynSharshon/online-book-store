@@ -17,10 +17,10 @@ import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "shopping_carts")
+@Getter
+@Setter
 @NoArgsConstructor
 public class ShoppingCart {
     @Id

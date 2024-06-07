@@ -40,7 +40,7 @@ public class CategoryController {
     private final BookService bookService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new category",
             description = "Create a new category")
@@ -53,12 +53,12 @@ public class CategoryController {
             @ApiResponse(responseCode = "403", description = "Not enough access rights",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
-    public CategoryResponseDto createCategory(@RequestBody @Valid CategoryRequestDto categoryDto) {
-        return categoryService.save(categoryDto);
+    public CategoryResponseDto createNewCategory(@RequestBody @Valid CategoryRequestDto categoryDto) {
+        return categoryService.createNewCategory(categoryDto);
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return all of categories",
             description = "Return all of categories")
@@ -67,14 +67,14 @@ public class CategoryController {
             @ApiResponse(responseCode = "401", description = "Required authorization",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
     })
-    public List<CategoryResponseDto> getAll(
+    public List<CategoryResponseDto> getAllCategories(
             @ParameterObject @PageableDefault(sort = "name", value = 5) Pageable pageable
     ) {
-        return categoryService.findAll(pageable);
+        return categoryService.getAllCategories(pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return category",
             description = "Return single category by ID")
@@ -84,11 +84,11 @@ public class CategoryController {
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
     })
     public CategoryResponseDto getCategoryById(@PathVariable Long id) {
-        return categoryService.getById(id);
+        return categoryService.getCategoryById(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "Update a category",
             description = "Update a category if exist")
@@ -105,11 +105,11 @@ public class CategoryController {
             @PathVariable Long id,
             @RequestBody @Valid CategoryRequestDto categoryDto
     ) {
-        return categoryService.update(id, categoryDto);
+        return categoryService.updateCategory(id, categoryDto);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete a category by id",
             description = "Delete a category by id if exist")
@@ -123,11 +123,11 @@ public class CategoryController {
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
     public void deleteCategory(@PathVariable Long id) {
-        categoryService.deleteById(id);
+        categoryService.deleteCategory(id);
     }
 
     @GetMapping("/{id}/books")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return page of books by category",
             description = "Return page of books with pagination and sorting by category ID")
@@ -140,6 +140,6 @@ public class CategoryController {
             @PathVariable Long id,
             @ParameterObject @PageableDefault(sort = "title", value = 5) Pageable pageable
     ) {
-        return bookService.getByCategoryId(id, pageable);
+        return bookService.getBooksByCategoryId(id, pageable);
     }
 }

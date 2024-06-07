@@ -20,18 +20,14 @@ databaseChangeLog:
   - include:
       file: db/changelog/changeset/10-create-table-books_categories.yml
   - include:
-      file: db/changelog/changeset/11-insert-value-into-users.yml
+      file: db/changelog/changeset/11-insert-value-into-categories.yml
   - include:
-      file: db/changelog/changeset/12-insert-value-into-users_roles.yml
+      file: db/changelog/changeset/12-insert-value-into-books_categories.yml
   - include:
-      file: db/changelog/changeset/13-insert-value-into-categories.yml
+      file: db/changelog/changeset/13-create-table-shopping_carts.yaml
   - include:
-      file: db/changelog/changeset/14-insert-value-into-books_categories.yml
+      file: db/changelog/changeset/14-create-table-cart_items.yaml
   - include:
-      file: db/changelog/changeset/15-create-table-shopping_carts.yaml
+      file: db/changelog/changeset/15-create-table-orders.yaml
   - include:
-      file: db/changelog/changeset/16-create-table-cart_items.yaml
-  - include:
-      file: db/changelog/changeset/17-create-table-orders.yaml
-  - include:
-      file: db/changelog/changeset/18-create-table-order-items.yaml
+      file: db/changelog/changeset/16-create-table-order-items.yaml

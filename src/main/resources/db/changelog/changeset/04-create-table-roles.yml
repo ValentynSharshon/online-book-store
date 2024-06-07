@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-table-roles
+      id: create-roles-table
       author: Valentyn Sharshon
       changes:
         - createTable:
@@ -14,7 +14,7 @@ databaseChangeLog:
                     primaryKey: true
               - column:
                   name: name
-                  type: enum('ROLE_ADMIN','ROLE_USER')
+                  type: enum('ROLE_ADMIN','ROLE_MANAGER','ROLE_USER')
                   constraints:
                     uniqueConstraintName: unique_role_name
                     unique: true
