@@ -24,7 +24,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @org.springframework.transaction.annotation.Transactional
-    public ShoppingCartDto getShoppingCartWithCartItems(User user) {
+    public ShoppingCartDto getShoppingCart(User user) {
         ShoppingCart shoppingCart =
                 cartRepository.findByUserWithCartItems(user)
                         .orElseGet(() -> cartRepository.save(new ShoppingCart(user)));
@@ -48,7 +48,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional
-    public void removeCartItem(Long cartItemId, User user) {
+    public void deleteCartItem(Long cartItemId, User user) {
         ShoppingCart shoppingCart = cartRepository.findByUser(user).orElseThrow(
                 () -> new EntityNotFoundException("Can't remove item by ID: " + cartItemId));
         cartItemService.remove(cartItemId, shoppingCart);

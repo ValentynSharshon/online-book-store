@@ -8,132 +8,6 @@ databaseChangeLog:
             columns:
               - column:
                   name: title
-                  value: "The Shadow of the Wind"
-              - column:
-                  name: author
-                  value: "Carlos Ruiz Zafón"
-              - column:
-                  name: isbn
-                  value: "9780143034902"
-              - column:
-                  name: price
-                  valueNumeric: 12.99
-              - column:
-                  name: description
-                  value: "A captivating tale of mystery, love, and tragedy set in post-war Barcelona."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/shadow_of_the_wind.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "To Kill a Mockingbird"
-              - column:
-                  name: author
-                  value: "Harper Lee"
-              - column:
-                  name: isbn
-                  value: "9780061120084"
-              - column:
-                  name: price
-                  valueNumeric: 9.99
-              - column:
-                  name: description
-                  value: "A classic novel that explores themes of racial injustice and moral growth in the American South."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/to_kill_a_mockingbird.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "1984"
-              - column:
-                  name: author
-                  value: "George Orwell"
-              - column:
-                  name: isbn
-                  value: "9780451524935"
-              - column:
-                  name: price
-                  valueNumeric: 10.50
-              - column:
-                  name: description
-                  value: "A dystopian novel depicting a totalitarian regime and the struggle for freedom and truth."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/1984.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "The Great Gatsby"
-              - column:
-                  name: author
-                  value: "F. Scott Fitzgerald"
-              - column:
-                  name: isbn
-                  value: "9780743273565"
-              - column:
-                  name: price
-                  valueNumeric: 8.75
-              - column:
-                  name: description
-                  value: "A masterful portrayal of the Jazz Age and the American Dream, filled with love, greed, and tragedy."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/the_great_gatsby.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "Pride and Prejudice"
-              - column:
-                  name: author
-                  value: "Jane Austen"
-              - column:
-                  name: isbn
-                  value: "9780486284736"
-              - column:
-                  name: price
-                  valueNumeric: 7.99
-              - column:
-                  name: description
-                  value: "A timeless romance that explores the societal norms and prejudices of early 19th-century England."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/pride_and_prejudice.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "The Catcher in the Rye"
-              - column:
-                  name: author
-                  value: "J.D. Salinger"
-              - column:
-                  name: isbn
-                  value: "9780316769488"
-              - column:
-                  name: price
-                  valueNumeric: 11.25
-              - column:
-                  name: description
-                  value: "A coming-of-age novel that follows the disillusioned teenager Holden Caulfield through New York City."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/the_catcher_in_the_rye.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
                   value: "Harry Potter and the Sorcerer's Stone"
               - column:
                   name: author
@@ -143,13 +17,97 @@ databaseChangeLog:
                   value: "9780590353427"
               - column:
                   name: price
-                  valueNumeric: 14.99
+                  valueNumeric: 10.99
               - column:
                   name: description
-                  value: "The first book in the beloved Harry Potter series, introducing readers to the magical world of Hogwarts."
+                  value: "The first book in the beloved Harry Potter series introduces readers to Harry, a young boy who discovers on his eleventh birthday that he is a wizard. Whisked away to the magical Hogwarts School of Witchcraft and Wizardry, Harry begins a journey that will change his life forever"
               - column:
                   name: cover_image
-                  value: "https://images.example.com/harry_potter_and_the_sorcerers_stone.jpg"
+                  value: "https://images.example.com/example.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Harry Potter and the Chamber of Secrets"
+              - column:
+                  name: author
+                  value: "J.K. Rowling"
+              - column:
+                  name: isbn
+                  value: "9780439064873"
+              - column:
+                  name: price
+                  valueNumeric: 10.99
+              - column:
+                  name: description
+                  value: "In the second installment, Harry returns to Hogwarts for his second year and finds himself facing new challenges, including a mysterious force turning students to stone and the secrets hidden within the Chamber of Secrets"
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/to_kill_a_mockingbird.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Harry Potter and the Prisoner of Azkaban"
+              - column:
+                  name: author
+                  value: "J.K. Rowling"
+              - column:
+                  name: isbn
+                  value: "9780439136365"
+              - column:
+                  name: price
+                  valueNumeric: 10.99
+              - column:
+                  name: description
+                  value: "The third book follows Harry as he discovers more about his past and faces new dangers, including the escape of the notorious prisoner Sirius Black from Azkaban prison and the secrets that could change everything he knows"
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/example.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Harry Potter and the Goblet of Fire"
+              - column:
+                  name: author
+                  value: "J.K. Rowling"
+              - column:
+                  name: isbn
+                  value: "9780439139601"
+              - column:
+                  name: price
+                  valueNumeric: 12.99
+              - column:
+                  name: description
+                  value: "Harry's fourth year at Hogwarts is marked by the Triwizard Tournament, a magical competition that brings together three wizarding schools. The stakes are higher than ever as Harry faces life-threatening tasks and dark forces that threaten the wizarding world"
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/example.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "Harry Potter and the Order of the Phoenix"
+              - column:
+                  name: author
+                  value: "J.K. Rowling"
+              - column:
+                  name: isbn
+                  value: "9780439358071"
+              - column:
+                  name: price
+                  valueNumeric: 12.99
+              - column:
+                  name: description
+                  value: "In the fifth book, Harry faces increasing dangers from the rise of the dark wizard Voldemort and the oppressive measures of the Ministry of Magic. As he forms a secret group, Dumbledore's Army, to fight back, Harry learns more about his own destiny"
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/example.jpg"
         - insert:
             tableName: books
             columns:
@@ -161,16 +119,37 @@ databaseChangeLog:
                   value: "J.R.R. Tolkien"
               - column:
                   name: isbn
-                  value: "9780345339683"
+                  value: "9780547928227"
               - column:
                   name: price
-                  valueNumeric: 13.25
+                  valueNumeric: 14.99
               - column:
                   name: description
-                  value: "A captivating adventure that follows Bilbo Baggins on a quest to reclaim the lost Dwarf Kingdom of Erebor."
+                  value: "This classic tale introduces readers to Bilbo Baggins, a hobbit who embarks on an unexpected adventure to help a group of dwarves reclaim their mountain home from the dragon Smaug. Along the way, Bilbo encounters trolls, elves, and the creature Gollum, who possesses a mysterious ring"
               - column:
                   name: cover_image
-                  value: "https://images.example.com/the_hobbit.jpg"
+                  value: "https://images.example.com/example.jpg"
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: "The Fellowship of the Ring"
+              - column:
+                  name: author
+                  value: "J.R.R. Tolkien"
+              - column:
+                  name: isbn
+                  value: "9780547928210"
+              - column:
+                  name: price
+                  valueNumeric: 15.99
+              - column:
+                  name: description
+                  value: "The first volume of The Lord of the Rings trilogy follows Frodo Baggins as he inherits the One Ring from his uncle Bilbo and sets out on a perilous journey to destroy it. Joined by a fellowship of friends and allies, Frodo must evade the dark forces seeking the Ring"
+              - column:
+                  name: cover_image
+                  value: "https://images.example.com/example.jpg"
         - insert:
             tableName: books
             columns:
@@ -197,187 +176,40 @@ databaseChangeLog:
             columns:
               - column:
                   name: title
-                  value: "The Alchemist"
-              - column:
-                  name: author
-                  value: "Paulo Coelho"
-              - column:
-                  name: isbn
-                  value: "9780062315007"
-              - column:
-                  name: price
-                  valueNumeric: 11.99
-              - column:
-                  name: description
-                  value: "A philosophical novel following a young Andalusian shepherd's journey to discover his personal legend."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/the_alchemist.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "The Road"
-              - column:
-                  name: author
-                  value: "Cormac McCarthy"
-              - column:
-                  name: isbn
-                  value: "9780307387899"
-              - column:
-                  name: price
-                  valueNumeric: 9.75
-              - column:
-                  name: description
-                  value: "A post-apocalyptic novel that follows a father and son's journey through a barren, dangerous landscape."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/the_road.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "Brave New World"
-              - column:
-                  name: author
-                  value: "Aldous Huxley"
-              - column:
-                  name: isbn
-                  value: "9780060850524"
-              - column:
-                  name: price
-                  valueNumeric: 12.50
-              - column:
-                  name: description
-                  value: "A dystopian novel set in a futuristic society where technological advances have eradicated individuality and emotion."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/brave_new_world.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "The Picture of Dorian Gray"
+                  value: "The Importance of Being Earnest"
               - column:
                   name: author
                   value: "Oscar Wilde"
               - column:
                   name: isbn
-                  value: "9780141442464"
+                  value: "9780486264783"
               - column:
                   name: price
-                  valueNumeric: 8.99
+                  valueNumeric: 5.99
               - column:
                   name: description
-                  value: "A Gothic tale of vanity, morality, and the consequences of a life devoted to pleasure."
+                  value: "A classic comedy of manners, this play satirizes the social customs of Victorian England. It follows the lives of Jack Worthing and Algernon Moncrieff as they create fictional identities to escape social obligations and win the hearts of their beloveds"
               - column:
                   name: cover_image
-                  value: "https://images.example.com/the_picture_of_dorian_gray.jpg"
+                  value: "https://images.example.com/example.jpg"
         - insert:
             tableName: books
             columns:
               - column:
                   name: title
-                  value: "The Hitchhiker's Guide to the Galaxy"
+                  value: "The Complete Short Stories of Oscar Wilde"
               - column:
                   name: author
-                  value: "Douglas Adams"
+                  value: "Oscar Wilde"
               - column:
                   name: isbn
-                  value: "9780345391803"
+                  value: "9780141439693"
               - column:
                   name: price
-                  valueNumeric: 10.99
+                  valueNumeric: 11.99
               - column:
                   name: description
-                  value: "A comedic science fiction series following the misadventures of Arthur Dent, an ordinary human."
+                  value: "This collection brings together all of Wilde's short stories, including beloved tales such as The Canterville Ghost, The Happy Prince, and The Nightingale and the Rose. Each story showcases Wilde's wit, charm, and keen social insight"
               - column:
                   name: cover_image
-                  value: "https://images.example.com/the_hitchhikers_guide_to_the_galaxy.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "The Kite Runner"
-              - column:
-                  name: author
-                  value: "Khaled Hosseini"
-              - column:
-                  name: isbn
-                  value: "9781594631931"
-              - column:
-                  name: price
-                  valueNumeric: 13.49
-              - column:
-                  name: description
-                  value: "A powerful story of friendship, betrayal, and redemption set against the backdrop of Afghanistan's tumultuous history."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/the_kite_runner.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "The Grapes of Wrath"
-              - column:
-                  name: author
-                  value: "John Steinbeck"
-              - column:
-                  name: isbn
-                  value: "9780143039433"
-              - column:
-                  name: price
-                  valueNumeric: 11.00
-              - column:
-                  name: description
-                  value: "A Pulitzer Prize-winning novel that portrays the struggles of a Depression-era family as they migrate to California."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/the_grapes_of_wrath.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "Frankenstein"
-              - column:
-                  name: author
-                  value: "Mary Shelley"
-              - column:
-                  name: isbn
-                  value: "9780486282114"
-              - column:
-                  name: price
-                  valueNumeric: 9.25
-              - column:
-                  name: description
-                  value: "A Gothic horror novel exploring themes of scientific hubris, ambition, and the nature of humanity."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/frankenstein.jpg"
-        - insert:
-            tableName: books
-            columns:
-              - column:
-                  name: title
-                  value: "Moby-Dick"
-              - column:
-                  name: author
-                  value: "Herman Melville"
-              - column:
-                  name: isbn
-                  value: "9780142437247"
-              - column:
-                  name: price
-                  valueNumeric: 14.00
-              - column:
-                  name: description
-                  value: "Moby-Dick is a novel by Herman Melville, first published in 1851. The story follows Ishmael, a sailor aboard the whaling ship Pequod, captained by the vengeful and enigmatic Captain Ahab. Ahab's obsessive quest for revenge against the white whale Moby Dick, who had previously maimed him, drives the crew into increasingly dangerous waters. The novel is a complex exploration of themes such as obsession, fate, and the nature of evil, and it remains one of the greatest works of American literature."
-              - column:
-                  name: cover_image
-                  value: "https://images.example.com/moby_dick.jpg"
+                  value: "https://images.example.com/example.jpg"

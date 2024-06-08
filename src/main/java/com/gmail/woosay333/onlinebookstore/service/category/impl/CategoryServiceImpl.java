@@ -21,27 +21,27 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
-    public List<CategoryResponseDto> findAll(Pageable pageable) {
+    public List<CategoryResponseDto> getAllCategories(Pageable pageable) {
         return categoryRepository.findAll(pageable).stream()
                 .map(categoryMapper::toResponseDto)
                 .toList();
     }
 
     @Override
-    public CategoryResponseDto getById(Long id) {
+    public CategoryResponseDto getCategoryById(Long id) {
         return categoryMapper.toResponseDto(
                 categoryRepository.findById(id).orElseThrow(
                         () -> new EntityNotFoundException("Can't find category by id:" + id)));
     }
 
     @Override
-    public CategoryResponseDto save(CategoryRequestDto categoryDto) {
+    public CategoryResponseDto createNewCategory(CategoryRequestDto categoryDto) {
         Category category = categoryMapper.toModel(categoryDto);
         return categoryMapper.toResponseDto(categoryRepository.save(category));
     }
 
     @Override
-    public CategoryResponseDto update(Long id, CategoryRequestDto categoryDto) {
+    public CategoryResponseDto updateCategory(Long id, CategoryRequestDto categoryDto) {
         if (!categoryRepository.existsById(id)) {
             throw new EntityNotFoundException("Can't find category by id " + id);
         }
@@ -51,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteCategory(Long id) {
         if (categoryRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException("Can't find category to delete by id " + id);
         }

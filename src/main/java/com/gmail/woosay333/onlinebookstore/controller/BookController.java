@@ -1,8 +1,8 @@
 package com.gmail.woosay333.onlinebookstore.controller;
 
-import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookResponseDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
-import com.gmail.woosay333.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.gmail.woosay333.onlinebookstore.service.book.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,7 +39,7 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return page of books",
             description = "Return page of books with pagination and sorting")
@@ -48,15 +48,15 @@ public class BookController {
             @ApiResponse(responseCode = "401", description = "Required authorization",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
     })
-    public List<BookDto> getAll(
+    public List<BookResponseDto> getAllBooks(
             @ParameterObject
             @PageableDefault(sort = {"title", "author"}, value = 5) Pageable pageable
     ) {
-        return bookService.getAll(pageable);
+        return bookService.getAllBooks(pageable);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return single book by id",
             description = "Return single book by id")
@@ -67,12 +67,12 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Book with this id not exist",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
-    public BookDto getBookById(@PathVariable @Parameter(description = "Book ID") Long id) {
-        return bookService.getById(id);
+    public BookResponseDto getBookById(@PathVariable @Parameter(description = "Book ID") Long id) {
+        return bookService.getBookById(id);
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new book",
             description = "Create a new book if isbn uniq")
@@ -87,12 +87,12 @@ public class BookController {
             @ApiResponse(responseCode = "409", description = "Conflict - the isbn non uniq",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
-        return bookService.save(bookDto);
+    public BookResponseDto createNewBook(@RequestBody @Valid BookRequestDto bookDto) {
+        return bookService.createNewBook(bookDto);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "Update a book",
             description = "Update a book if exist")
@@ -107,15 +107,15 @@ public class BookController {
             @ApiResponse(responseCode = "409", description = "Conflict - the isbn non uniq",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
-    public BookDto updateBook(
+    public BookResponseDto updateBook(
             @PathVariable @Parameter(description = "Book ID") Long id,
-            @RequestBody @Valid CreateBookRequestDto bookDto
+            @RequestBody @Valid BookRequestDto bookDto
     ) {
-        return bookService.update(id, bookDto);
+        return bookService.updateBook(id, bookDto);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete a book by id", description = "Delete a book by id if exist")
     @ApiResponses(value = {
@@ -128,11 +128,11 @@ public class BookController {
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
     public void deleteBook(@PathVariable @Parameter(description = "Book ID") Long id) {
-        bookService.delete(id);
+        bookService.deleteBook(id);
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return filtered page of books",
             description = "Return filtered page of books with pagination and sorting. "
@@ -142,11 +142,11 @@ public class BookController {
             @ApiResponse(responseCode = "401", description = "Required authorization",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
     })
-    public List<BookDto> searchBooks(
+    public List<BookResponseDto> searchBooks(
             @ParameterObject
             @PageableDefault(sort = {"title", "author"}, value = 5)Pageable pageable,
             BookSearchParameters bookSearchParameters
     ) {
-        return bookService.getByParameters(bookSearchParameters, pageable);
+        return bookService.getBooksByParameters(bookSearchParameters, pageable);
     }
 }

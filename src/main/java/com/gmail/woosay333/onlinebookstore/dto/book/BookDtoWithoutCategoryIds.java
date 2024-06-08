@@ -6,18 +6,18 @@ import java.math.BigDecimal;
 public record BookDtoWithoutCategoryIds(
         @Schema(example = "10")
         Long id,
-        @Schema(example = "Title of the book")
+        @Schema(example = "Book title")
         String title,
         @Schema(example = "Book Author")
         String author,
-        @Schema(example = "0061964360159")
+        @Schema(example = "9780142437247")
         String isbn,
         @Schema(example = "10.99")
         BigDecimal price,
-        @Schema(example = "About book",
+        @Schema(example = "Short book description",
                 nullable = true)
         String description,
-        @Schema(description = "Link on book cover",
+        @Schema(description = "Book cover image link",
                 example = "https://example.com/cover-image.jpg",
                 nullable = true)
         String coverImage

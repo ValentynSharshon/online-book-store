@@ -7,15 +7,15 @@ import java.util.Set;
 import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
-    List<CategoryResponseDto> findAll(Pageable pageable);
+    List<CategoryResponseDto> getAllCategories(Pageable pageable);
 
-    CategoryResponseDto getById(Long id);
+    CategoryResponseDto getCategoryById(Long id);
 
-    CategoryResponseDto save(CategoryRequestDto categoryDto);
+    CategoryResponseDto createNewCategory(CategoryRequestDto categoryDto);
 
-    CategoryResponseDto update(Long id, CategoryRequestDto categoryDto);
+    CategoryResponseDto updateCategory(Long id, CategoryRequestDto categoryDto);
 
-    void deleteById(Long id);
+    void deleteCategory(Long id);
 
     Set<Long> getAllExistedCategoryIdsFromIds(Set<Long> ids);
 }

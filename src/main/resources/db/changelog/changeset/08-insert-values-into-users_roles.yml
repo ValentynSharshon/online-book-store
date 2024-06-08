@@ -17,7 +17,16 @@ databaseChangeLog:
             columns:
               - column:
                   name: user_id
-                  valueComputed: (SELECT id FROM users WHERE email = 'admin@email.com')
+                  valueComputed: (SELECT id FROM users WHERE email = 'manager@email.com')
+              - column:
+                  name: role_id
+                  valueComputed: (SELECT id FROM roles WHERE name = 'ROLE_MANAGER')
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: (SELECT id FROM users WHERE email = 'user@email.com')
               - column:
                   name: role_id
                   valueComputed: (SELECT id FROM roles WHERE name = 'ROLE_USER')

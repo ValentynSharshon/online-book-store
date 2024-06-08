@@ -31,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDto saveOrder(OrderRequestDto requestDto, User user) {
+    public OrderResponseDto createOrder(OrderRequestDto requestDto, User user) {
         ShoppingCart shoppingCart =
                 shoppingCartRepository.findByUserWithCartItems(user).orElseThrow(
                         () -> new EntityNotFoundException(
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<OrderResponseDto> getAllOrders(User user, Pageable pageable) {
+    public List<OrderResponseDto> getOrderHistory(User user, Pageable pageable) {
         return orderRepository.findAllByUser(user, pageable).stream()
                 .map(orderMapper::toDto)
                 .toList();
@@ -67,13 +67,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<OrderItemResponseDto> getAllCartItems(Long orderId, User user, Pageable pageable) {
+    public List<OrderItemResponseDto> getAllOrderItems(Long orderId, User user, Pageable pageable) {
         return orderItemService.findAllByOrder(orderId, user, pageable);
     }
 
     @Override
     @Transactional
-    public OrderItemResponseDto getCartItem(Long id, Long orderId, User user) {
+    public OrderItemResponseDto getOrderItem(Long id, Long orderId, User user) {
         return orderItemService.getById(id, orderId, user);
     }
 }

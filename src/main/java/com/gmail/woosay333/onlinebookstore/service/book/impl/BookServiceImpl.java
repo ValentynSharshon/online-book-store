@@ -1,9 +1,9 @@
 package com.gmail.woosay333.onlinebookstore.service.book.impl;
 
-import com.gmail.woosay333.onlinebookstore.dto.book.BookDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
+import com.gmail.woosay333.onlinebookstore.dto.book.BookResponseDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
-import com.gmail.woosay333.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.gmail.woosay333.onlinebookstore.entity.Book;
 import com.gmail.woosay333.onlinebookstore.exception.EntityNotFoundException;
 import com.gmail.woosay333.onlinebookstore.exception.UniqueIsbnException;
@@ -30,9 +30,11 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public BookDto save(CreateBookRequestDto bookRequestDto) {
+    public BookResponseDto createNewBook(BookRequestDto bookRequestDto) {
         if (bookRepository.findByIsbn(bookRequestDto.isbn()).isPresent()) {
-            throw new UniqueIsbnException("Non uniq ISBN: " + bookRequestDto.isbn());
+            throw new UniqueIsbnException(
+                    String.format("Book ISBN: %s already exist",
+                            bookRequestDto.isbn()));
         }
         validateCategories(bookRequestDto);
         Book book = bookMapper.toModel(bookRequestDto);
@@ -40,25 +42,27 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getAll(Pageable pageable) {
+    public List<BookResponseDto> getAllBooks(Pageable pageable) {
         return bookRepository.findAllBooks(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
 
     @Override
-    public BookDto getById(Long id) {
+    public BookResponseDto getBookById(Long id) {
         return bookMapper.toDto(getBook(id));
     }
 
     @Override
     public Book getBook(Long id) {
         return bookRepository.findByIdWithCategories(id).orElseThrow(
-                () -> new EntityNotFoundException("Book not found by id " + id));
+                () -> new EntityNotFoundException(
+                        String.format("Book with id: %d not found",
+                                id)));
     }
 
     @Override
-    public List<BookDto> getByParameters(
+    public List<BookResponseDto> getBooksByParameters(
             BookSearchParameters bookSearchParameters, Pageable pageable) {
         Specification<Book> bookSpecification =
                 bookSpecificationBuilder.build(bookSearchParameters);
@@ -69,9 +73,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public BookDto update(Long id, CreateBookRequestDto bookRequestDto) {
+    public BookResponseDto updateBook(Long id, BookRequestDto bookRequestDto) {
         validateIsbnUniqueness(id, bookRequestDto);
-
         Book book = bookMapper.toModel(bookRequestDto);
         book.setId(id);
         return bookMapper.toDto(bookRepository.save(book));
@@ -79,42 +82,47 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void deleteBook(Long id) {
         if (bookRepository.findById(id).isEmpty()) {
-            throw new EntityNotFoundException("Can't find book to delete by id " + id);
+            throw new EntityNotFoundException(
+                    String.format("Can't find book to delete by id: %d",
+                            id));
         }
         bookRepository.deleteById(id);
     }
 
     @Override
-    public List<BookDtoWithoutCategoryIds> getByCategoryId(Long id, Pageable pageable) {
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id, Pageable pageable) {
         return bookRepository.findAllByCategories_Id(id, pageable).stream()
                 .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 
-    private void validateIsbnUniqueness(Long id, CreateBookRequestDto bookRequestDto) {
+    private void validateIsbnUniqueness(Long id, BookRequestDto bookRequestDto) {
         List<Book> allByIdOrIsbn = bookRepository.findAllByIdOrIsbn(id, bookRequestDto.isbn());
         if (allByIdOrIsbn.size() > 1) {
-            throw new UniqueIsbnException("Book with ISBN "
-                    + bookRequestDto.isbn() + " already exist");
+            throw new UniqueIsbnException(
+                    String.format("Book with ISBN: %s already exist",
+                            bookRequestDto.isbn()));
         }
-
         if (allByIdOrIsbn.isEmpty() || !allByIdOrIsbn.getFirst().getId().equals(id)) {
-            throw new EntityNotFoundException("Can't find book to update by id " + id);
+            throw new EntityNotFoundException(
+                    String.format("Can't find book to update by id: %d",
+                            id));
         }
-
         validateCategories(bookRequestDto);
     }
 
-    private void validateCategories(CreateBookRequestDto bookRequestDto) {
+    private void validateCategories(BookRequestDto bookRequestDto) {
         Set<Long> categoryIds = bookRequestDto.categoryIds();
         Set<Long> categoryIdsFromDb = categoryService.getAllExistedCategoryIdsFromIds(categoryIds);
         if (categoryIdsFromDb.size() < categoryIds.size()) {
             List<Long> notExistedIds = categoryIds.stream()
                     .filter(id -> !categoryIdsFromDb.contains(id))
                     .toList();
-            throw new EntityNotFoundException("Can't find categories with ids: " + notExistedIds);
+            throw new EntityNotFoundException(
+                    String.format("Can't find categories with ids: %s",
+                            notExistedIds));
         }
     }
 }

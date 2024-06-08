@@ -5,10 +5,10 @@ import jakarta.validation.constraints.NotEmpty;
 
 public record CartItemRequestDto(
         @NotEmpty
-        @Schema(example = "25")
+        @Schema(example = "10", nullable = true)
         Long bookId,
         @NotEmpty
-        @Schema(example = "10")
+        @Schema(example = "15", nullable = true)
         int quantity
 ) {
 }
