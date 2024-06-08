@@ -1,8 +1,8 @@
 package com.gmail.woosay333.onlinebookstore.controller;
 
+import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookResponseDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookSearchParameters;
-import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.service.book.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,7 +39,7 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return page of books",
             description = "Return page of books with pagination and sorting")
@@ -56,7 +56,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return single book by id",
             description = "Return single book by id")
@@ -72,7 +72,7 @@ public class BookController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new book",
             description = "Create a new book if isbn uniq")
@@ -92,7 +92,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "Update a book",
             description = "Update a book if exist")
@@ -115,7 +115,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete a book by id", description = "Delete a book by id if exist")
     @ApiResponses(value = {
@@ -132,7 +132,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return filtered page of books",
             description = "Return filtered page of books with pagination and sorting. "

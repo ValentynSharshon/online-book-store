@@ -40,7 +40,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create an order",
             description = "Create an order from user`s cart")
@@ -59,7 +59,7 @@ public class OrderController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all orders",
             description = "Get all user`s orders")
@@ -76,7 +76,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "Update order status",
             description = "Update order status by ID")
@@ -97,7 +97,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}/items")
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return all cart items from certain order",
             description = "Return all cart items from certain order by order ID")
@@ -115,7 +115,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}/items/{id}")
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return specific cart item from certain order",
             description = "Return cart item by ID from certain order by order ID")

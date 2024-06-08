@@ -36,7 +36,7 @@ public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Return shopping cart",
             description = "Return shopping cart authenticated user")
@@ -50,7 +50,7 @@ public class ShoppingCartController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add new cart item to cart",
             description = "Add new cart item to user`s cart")
@@ -69,7 +69,7 @@ public class ShoppingCartController {
     }
 
     @PutMapping("/cart-items/{cartItemId}")
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "Update cart item quantity by ID",
             description = "Update cart item quantity by ID")
@@ -89,7 +89,7 @@ public class ShoppingCartController {
     }
 
     @DeleteMapping("/cart-items/{cartItemId}")
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete a cart item by ID",
             description = "Delete a cart item by ID if exist")
