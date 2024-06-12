@@ -43,6 +43,7 @@ class BookRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByIsbn_ExistingBookIsbn_ReturnOptionalOfBook() {
         Optional<Book> actual = bookRepository.findByIsbn(VALID_BOOK_ISBN_HOBBIT);
+
         assertTrue(actual.isPresent(), "Optional of book by existing ISBN should be present");
     }
 
@@ -57,6 +58,7 @@ class BookRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByIsbn_NonExistingBookIsbn_ReturnEmptyOptionalOfBook() {
         Optional<Book> actual = bookRepository.findByIsbn(INVALID_BOOK_ISBN);
+
         assertTrue(actual.isEmpty(), "Optional of book by non-existing ISBN should be empty");
     }
 
@@ -72,6 +74,7 @@ class BookRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByIdWithCategories_FindingBookByExistingId_ReturnOptionalOfBook() {
         Optional<Book> actual = bookRepository.findByIdWithCategories(VALID_BOOK_ID);
+
         assertTrue(actual.isPresent(), "Optional of book by existing ID should be present");
         assertNotNull(actual.get().getCategories());
     }
@@ -87,6 +90,7 @@ class BookRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findByIdWithCategories_FindingBookByNonExistingId_ReturnEmptyOptional() {
         Optional<Book> actual = bookRepository.findByIdWithCategories(INVALID_BOOK_ID);
+
         assertTrue(actual.isEmpty(), "Optional of book by non-existing ID should be empty");
     }
 
@@ -102,8 +106,10 @@ class BookRepositoryTest {
     void findAllByParams_ReturnAllBooksByParams() {
         Specification<Book> specification = Specification.where(null);
         Pageable pageable = Pageable.unpaged();
+
         Page<Book> actual = bookRepository.findAll(specification, pageable);
         int expectedSize = 3;
+
         assertEquals(expectedSize, actual.getSize());
         actual.stream()
                 .map(Book::getCategories)
@@ -121,8 +127,10 @@ class BookRepositoryTest {
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findAllBooks_GetAllBooks_ReturnAllBooks() {
         Pageable pageable = Pageable.unpaged();
+
         List<Book> actual = bookRepository.findAllBooks(pageable);
         int expectedSize = 3;
+
         assertEquals(expectedSize, actual.size());
         actual.stream()
                 .map(Book::getCategories)
@@ -148,8 +156,10 @@ class BookRepositoryTest {
 
         assertNotNull(actualFantasy);
         assertNotNull(actualNovel);
+
         int expectedSizeFantasy = 2;
         int expectedSizeNovel = 1;
+
         assertEquals(expectedSizeFantasy, actualFantasy.size(), "Size should be equals");
         assertEquals(expectedSizeNovel, actualNovel.size(), "Size should be equals");
     }
@@ -164,19 +174,22 @@ class BookRepositoryTest {
             INSERT_BOOKS_CATEGORIES_SQL},
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void findAllByIdOrIsbn_GetAllBooksByIdAndIsbn_ReturnsAllBooksByIdAndIsbn() {
-        final List<Book> actualOne1 = bookRepository
+        final List<Book> actualValidIdValidIsbn = bookRepository
                 .findAllByIdOrIsbn(VALID_BOOK_ID, VALID_BOOK_ISBN_HOBBIT);
-        final List<Book> actualOne2 = bookRepository
+        final List<Book> actualInvalidIdValidIsbn = bookRepository
                 .findAllByIdOrIsbn(INVALID_BOOK_ID, VALID_BOOK_ISBN_HOBBIT);
-        final List<Book> actualOne3 = bookRepository
+        final List<Book> actualValidIdInvalidIsbn = bookRepository
                 .findAllByIdOrIsbn(VALID_BOOK_ID, INVALID_BOOK_ISBN);
-        final List<Book> actualZero = bookRepository
+        final List<Book> actualInvalidIdInvalidIsbn = bookRepository
                 .findAllByIdOrIsbn(INVALID_BOOK_ID, INVALID_BOOK_ISBN);
-        final int expectedSizeOne = 1;
-        final int expectedSizeZero = 0;
-        assertEquals(expectedSizeZero, actualZero.size());
-        assertEquals(expectedSizeOne, actualOne1.size());
-        assertEquals(expectedSizeOne, actualOne2.size());
-        assertEquals(expectedSizeOne, actualOne3.size());
+
+        final int expectedBookListSizeZero = 0;
+        final int expectedBookListSizeOne = 1;
+        final int expectedBookListSizeTwo = 2;
+
+        assertEquals(expectedBookListSizeTwo, actualValidIdValidIsbn.size());
+        assertEquals(expectedBookListSizeOne, actualInvalidIdValidIsbn.size());
+        assertEquals(expectedBookListSizeOne, actualValidIdInvalidIsbn.size());
+        assertEquals(expectedBookListSizeZero, actualInvalidIdInvalidIsbn.size());
     }
 }
