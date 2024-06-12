@@ -27,6 +27,11 @@ import com.gmail.woosay333.onlinebookstore.mapper.BookMapper;
 import com.gmail.woosay333.onlinebookstore.repository.book.BookRepository;
 import com.gmail.woosay333.onlinebookstore.repository.book.BookSpecificationBuilder;
 import com.gmail.woosay333.onlinebookstore.service.category.CategoryService;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,12 +44,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
@@ -69,7 +68,9 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Save a new book, returns BookResponseDto")
+    @DisplayName("""
+            Save a new book, returns BookResponseDto
+            """)
     void createNewBook_WithUniqueIsbnAndExistCategories_ReturnsBookResponseDto() {
         BookRequestDto requestDto = createBookRequestDto();
         Book book = createBook();
@@ -86,43 +87,59 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Save a new book with existing ISBN, trows exception")
+    @DisplayName("""
+            Save a new book with existing ISBN, trows exception
+            """)
     void createNewBook_WithNonUniqueIsbn_ThrowsException() {
         BookRequestDto requestDto = createBookRequestDto();
         Book book = createBook();
 
-        when(bookRepository.findByIsbn(requestDto.isbn())).thenReturn(Optional.of(book));
+        when(bookRepository.findByIsbn(requestDto.isbn()))
+                .thenReturn(Optional.of(book));
 
-        Exception actual = assertThrows(UniqueIsbnException.class, () -> bookService.createNewBook(requestDto));
-        assertEquals(String.format("Book ISBN: %s already exist", book.getIsbn()), actual.getMessage());
+        Exception actual = assertThrows(UniqueIsbnException.class,
+                () -> bookService.createNewBook(requestDto));
+        assertEquals(String.format("Book ISBN: %s already exist", book.getIsbn()),
+                actual.getMessage());
     }
 
     @Test
-    @DisplayName("Save a new book with non-existing categories, trows exception")
+    @DisplayName("""
+            Save a new book with non-existing categories, trows exception
+            """)
     void createNewBook_WithNonExistingCategories_ThrowsException() {
         BookRequestDto requestDto = createBookRequestDto();
         Set<Long> existedCategoriesIds = Set.of();
 
         mockForCreateBookMethod(requestDto, existedCategoriesIds);
 
-        Exception actual = assertThrows(EntityNotFoundException.class, () -> bookService.createNewBook(requestDto));
-        assertEquals(String.format("Can't find categories with ids: %s", VALID_BOOK_CATEGORY_IDS_HOBBIT), actual.getMessage());
+        Exception actual = assertThrows(EntityNotFoundException.class,
+                () -> bookService.createNewBook(requestDto));
+        assertEquals(String.format("Can't find categories with ids: %s",
+                VALID_BOOK_CATEGORY_IDS_HOBBIT),
+                actual.getMessage());
     }
 
     @Test
-    @DisplayName("Get all books from the repository, returns list of BookResponseDto")
+    @DisplayName("""
+            Get all books from the repository, returns list of BookResponseDto
+            """)
     void getAllBooks_ReturnsAllBooksFromDb() {
         List<Book> expected = List.of(createBook(), createBook());
 
-        when(bookRepository.findAllBooks(any(Pageable.class))).thenReturn(expected);
-        when(bookMapper.toDto(any(Book.class))).thenReturn(getBookResponseDto(createBook()));
+        when(bookRepository.findAllBooks(any(Pageable.class)))
+                .thenReturn(expected);
+        when(bookMapper.toDto(any(Book.class)))
+                .thenReturn(getBookResponseDto(createBook()));
 
         List<BookResponseDto> actual = bookService.getAllBooks(Pageable.unpaged());
         assertEquals(expected.size(), actual.size());
     }
 
     @Test
-    @DisplayName("Get existing book from the repository, returns BookResponseDto")
+    @DisplayName("""
+            Get existing book from the repository, returns BookResponseDto
+            """)
     void getBookById_ExistingBookId_ReturnsBookResponseDto() {
         Book bookFromRepository = createBook();
         bookFromRepository.setId(VALID_BOOK_ID);
@@ -138,16 +155,24 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Get non-existing book from repository, throws exception")
+    @DisplayName("""
+            Get non-existing book from repository, throws exception
+            """)
     void getBookById_NonExistingBookId_ThrowsException() {
-        when(bookRepository.findByIdWithCategories(VALID_BOOK_ID)).thenReturn(Optional.empty());
+        when(bookRepository.findByIdWithCategories(VALID_BOOK_ID))
+                .thenReturn(Optional.empty());
 
-        Exception actual = assertThrows(EntityNotFoundException.class, () -> bookService.getBookById(VALID_BOOK_ID));
-        assertEquals(String.format("Book with id: %d not found", VALID_BOOK_ID), actual.getMessage());
+        Exception actual = assertThrows(EntityNotFoundException.class,
+                () -> bookService.getBookById(VALID_BOOK_ID));
+        assertEquals(String.format("Book with id: %d not found",
+                VALID_BOOK_ID),
+                actual.getMessage());
     }
 
     @Test
-    @DisplayName("Update existing book and unique ISBN, returns BookResponseDto")
+    @DisplayName("""
+            Update existing book and unique ISBN, returns BookResponseDto
+            """)
     void updateBook_ExistingBook_ReturnsBookResponseDto() {
         Book existingBook = createBook();
         existingBook.setId(VALID_BOOK_ID);
@@ -162,7 +187,9 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Update non-existing book, throws exception")
+    @DisplayName("""
+           Update non-existing book, throws exception
+           """)
     void updateBook_NonExistingBook_ThrowsException() {
         BookRequestDto requestDto = createBookRequestDto();
 
@@ -171,11 +198,15 @@ class BookServiceImplTest {
 
         Exception actual = assertThrows(EntityNotFoundException.class,
                 () -> bookService.updateBook(VALID_BOOK_ID, requestDto));
-        assertEquals(String.format("Can't find book to update by id: %d", VALID_BOOK_ID), actual.getMessage());
+        assertEquals(String.format("Can't find book to update by id: %d",
+                VALID_BOOK_ID),
+                actual.getMessage());
     }
 
     @Test
-    @DisplayName("Update with non unique ISBN, throws exception")
+    @DisplayName("""
+           Update with non unique ISBN, throws exception
+           """)
     void updateBook_NonUniqueBookIsbn_ThrowsException() {
         BookRequestDto requestDto = createBookRequestDto();
         Book existingBook = createBook();
@@ -187,11 +218,15 @@ class BookServiceImplTest {
 
         Exception actual = assertThrows(UniqueIsbnException.class,
                 () -> bookService.updateBook(VALID_BOOK_ID, requestDto));
-        assertEquals(String.format("Book with ISBN: %s already exist", VALID_BOOK_ISBN_HOBBIT), actual.getMessage());
+        assertEquals(String.format("Book with ISBN: %s already exist",
+                VALID_BOOK_ISBN_HOBBIT),
+                actual.getMessage());
     }
 
     @Test
-    @DisplayName("Update with invalid categories IDs, throws exception")
+    @DisplayName("""
+          Update with invalid categories IDs, throws exception
+          """)
     void updateBook_NonExistingBookCategories_ThrowsException() {
         BookRequestDto requestDto = createBookRequestDto();
         Book existingBook = createBook();
@@ -202,11 +237,15 @@ class BookServiceImplTest {
 
         Exception actual = assertThrows(EntityNotFoundException.class,
                         () -> bookService.updateBook(VALID_BOOK_ID, requestDto));
-        assertEquals(String.format("Can't find categories with ids: %s", VALID_BOOK_CATEGORY_IDS_HOBBIT), actual.getMessage());
+        assertEquals(String.format("Can't find categories with ids: %s",
+                VALID_BOOK_CATEGORY_IDS_HOBBIT),
+                actual.getMessage());
     }
 
     @Test
-    @DisplayName("Delete existing book, returns void")
+    @DisplayName("""
+          Delete existing book, returns void
+          """)
     void deleteBook_ExistingBook_SuccessfullyDeleted() {
         when(bookRepository.findById(VALID_BOOK_ID))
                 .thenReturn(Optional.of(new Book()));
@@ -216,7 +255,9 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Delete non-existing book, throws exception")
+    @DisplayName("""
+          Delete non-existing book, throws exception
+          """)
     void delete_NonExistingBook_ThrowsException() {
         when(bookRepository.findById(VALID_BOOK_ID))
                 .thenReturn(Optional.empty());
@@ -224,11 +265,15 @@ class BookServiceImplTest {
         Exception exception = assertThrows(EntityNotFoundException.class,
                 () -> bookService.deleteBook(VALID_BOOK_ID));
 
-        assertEquals(String.format("Can't find book to delete by id: %d", VALID_BOOK_ID), exception.getMessage());
+        assertEquals(String.format("Can't find book to delete by id: %d",
+                VALID_BOOK_ID),
+                exception.getMessage());
     }
 
     @Test
-    @DisplayName("Get all books by category, returns list of BookDtoWithoutCategoryIds")
+    @DisplayName("""
+          Get all books by category, returns list of BookDtoWithoutCategoryIds
+          """)
     void getByCategoryId_FindAllBooksByCategoryId_ReturnsBooksForExistingCategory() {
         Pageable pageable = Pageable.unpaged();
         List<Book> expected = List.of(createBook(), createBook());
@@ -246,12 +291,15 @@ class BookServiceImplTest {
                         null)
         );
 
-        List<BookDtoWithoutCategoryIds> actual = bookService.getBooksByCategoryId(VALID_BOOK_ID, pageable);
+        List<BookDtoWithoutCategoryIds> actual = bookService
+                .getBooksByCategoryId(VALID_BOOK_ID, pageable);
         assertEquals(expected.size(), actual.size());
     }
 
     @Test
-    @DisplayName("Get by list of books by parameter, returns filtered list of BookResponseDto")
+    @DisplayName("""
+          Get by list of books by parameter, returns filtered list of BookResponseDto
+          """)
     void getBooksByParameters_listOfSearchBookParameters_ReturnsFilteredBookResponseDto() {
         Pageable pageable = Pageable.unpaged();
         Specification<Book> specification = Specification.where(null);

@@ -13,8 +13,12 @@ public class TestData {
     public static final Long VALID_BOOK_ID = 1L;
     public static final Long INVALID_BOOK_ID = 10L;
 
-    public static final String DELETE_VALUES_SQL = "classpath:db/script/delete-values.sql";
-    public static final String INSERT_BOOKS_SQL = "classpath:db/script/insert-values-into-books.sql";
-    public static final String INSERT_CATEGORIES_SQL = "classpath:db/script/insert-values-into-categories.sql";
-    public static final String INSERT_BOOKS_CATEGORIES_SQL = "classpath:db/script/insert-values-into-books-categories.sql";
+    public static final String DELETE_VALUES_SQL =
+            "classpath:db/script/delete-values.sql";
+    public static final String INSERT_BOOKS_SQL =
+            "classpath:db/script/insert-values-into-books.sql";
+    public static final String INSERT_CATEGORIES_SQL =
+            "classpath:db/script/insert-values-into-categories.sql";
+    public static final String INSERT_BOOKS_CATEGORIES_SQL =
+            "classpath:db/script/insert-values-into-books-categories.sql";
 }
