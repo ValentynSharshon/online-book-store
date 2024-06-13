@@ -84,7 +84,7 @@ class BookRepositoryTest {
 
     @Test
     @DisplayName("""
-            Find book with categories by existing ID, 
+            Find book with categories by existing ID,
             return optional of book with set of categories
             """)
     void findByIdWithCategories_FindingBookByExistingId_ReturnOptionalOfBook() {
