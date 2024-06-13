@@ -14,11 +14,11 @@ public class TestData {
     public static final Long INVALID_BOOK_ID = 10L;
 
     public static final String DELETE_VALUES_SQL =
-            "classpath:db/script/delete-values.sql";
+            "db/script/delete-values.sql";
     public static final String INSERT_BOOKS_SQL =
-            "classpath:db/script/insert-values-into-books.sql";
+            "db/script/insert-values-into-books.sql";
     public static final String INSERT_CATEGORIES_SQL =
-            "classpath:db/script/insert-values-into-categories.sql";
+            "db/script/insert-values-into-categories.sql";
     public static final String INSERT_BOOKS_CATEGORIES_SQL =
-            "classpath:db/script/insert-values-into-books-categories.sql";
+            "db/script/insert-values-into-books-categories.sql";
 }
