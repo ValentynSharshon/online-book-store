@@ -1,26 +1,45 @@
 package com.gmail.woosay333.onlinebookstore.controller;
 
+import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_AUTHOR_TOLKIEN;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_CATEGORIES_LORD_OF_THE_RINGS;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_ISBN_LORD_OF_THE_RINGS;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_PRICE_LORD_OF_THE_RINGS;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_TITLE_LORD_OF_THE_RINGS;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.DELETE_VALUES_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.EXIST_BOOK_ISBN;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_CATEGORIES_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_CATEGORIES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.UPDATE_BOOK_AUTHOR_TEST_AUTHOR;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.UPDATE_BOOK_TITLE_TEST_TITLE;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_AUTHOR_ROWLING;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_CATEGORY_IDS_HARRY_POTTER;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ISBN_HARRY_POTTER;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_PRICE_HARRY_POTTER;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_TITLE_HARRY_POTTER;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_AUTHOR_TOLKIEN;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_CATEGORY_IDS_HARRY_POTTER_CHAMBER_OF_SECRETS;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_CATEGORY_IDS_HOBBIT;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ID_HARRY_POTTER_CHAMBER_OF_SECRETS;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ID_HOBBIT;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ISBN_HARRY_POTTER_CHAMBER_OF_SECRETS;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ISBN_HOBBIT;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_PRICE_HARRY_POTTER_CHAMBER_OF_SECRETS;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_PRICE_HOBBIT;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_TITLE_HARRY_POTTER_CHAMBER_OF_SECRETS;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_TITLE_HOBBIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookRequestDto;
 import com.gmail.woosay333.onlinebookstore.dto.book.BookResponseDto;
 import java.sql.Connection;
+import java.util.Arrays;
+import java.util.List;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
@@ -87,7 +106,13 @@ class BookControllerTest {
             """)
     @WithMockUser(username = "manager", roles = {"MANAGER"})
     void createNewBook_ValidBookRequestDto_ReturnBookResponseDto() throws Exception {
-        BookRequestDto requestDto = createBookRequestDto();
+        BookRequestDto requestDto = BookRequestDto.builder()
+                .title(CREATE_BOOK_TITLE_LORD_OF_THE_RINGS)
+                .author(CREATE_BOOK_AUTHOR_TOLKIEN)
+                .categoryIds(CREATE_BOOK_CATEGORIES_LORD_OF_THE_RINGS)
+                .isbn(CREATE_BOOK_ISBN_LORD_OF_THE_RINGS)
+                .price(CREATE_BOOK_PRICE_LORD_OF_THE_RINGS)
+                .build();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
         MvcResult result = mockMvc.perform(post(URI)
@@ -99,28 +124,34 @@ class BookControllerTest {
                 .readValue(result.getResponse().getContentAsString(), BookResponseDto.class);
 
         assertNotNull(actual);
-        assertTrue(EqualsBuilder.reflectionEquals(getBookResponseDto(requestDto),
+        assertTrue(EqualsBuilder.reflectionEquals(BookResponseDto.builder()
+                .title(requestDto.title())
+                .author(requestDto.author())
+                .isbn(requestDto.isbn())
+                .categoryIds(requestDto.categoryIds())
+                .price(requestDto.price())
+                .build(),
                 actual,
                 "id", "isbn", "categoryIds"));
         assertNotNull(actual.id());
-        assertEquals(VALID_BOOK_ISBN_HARRY_POTTER, actual.isbn());
+        assertEquals(CREATE_BOOK_ISBN_LORD_OF_THE_RINGS, actual.isbn());
         assertTrue(requestDto.categoryIds().containsAll(actual.categoryIds()));
     }
 
     @Test
     @DisplayName("""
-            Create new book with existing ISBN,
-            expected: status - 409, response - ProblemDetail
+            Create a new book with existing ISBN,
+            expected status - 409, expected response - ProblemDetail
             """)
-    @WithMockUser(username = "admin", roles = {"MANAGER"})
+    @WithMockUser(username = "manager", roles = {"MANAGER"})
     void createNewBook_BookRequestDtoWithExistingIsbn_ResponseConflictAndReturnsProblemDetail()
             throws Exception {
         BookRequestDto requestDto = BookRequestDto.builder()
-                .title(VALID_BOOK_TITLE_HARRY_POTTER)
-                .author(VALID_BOOK_AUTHOR_ROWLING)
+                .title(CREATE_BOOK_TITLE_LORD_OF_THE_RINGS)
+                .author(CREATE_BOOK_AUTHOR_TOLKIEN)
                 .isbn(EXIST_BOOK_ISBN)
-                .categoryIds(VALID_BOOK_CATEGORY_IDS_HARRY_POTTER)
-                .price(VALID_BOOK_PRICE_HARRY_POTTER)
+                .categoryIds(CREATE_BOOK_CATEGORIES_LORD_OF_THE_RINGS)
+                .price(CREATE_BOOK_PRICE_LORD_OF_THE_RINGS)
                 .build();
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
@@ -141,14 +172,157 @@ class BookControllerTest {
                 actual.getProperties().get("error"));
     }
 
-    private static BookRequestDto createBookRequestDto() {
-        return BookRequestDto.builder()
-                .title(VALID_BOOK_TITLE_HARRY_POTTER)
-                .author(VALID_BOOK_AUTHOR_ROWLING)
-                .isbn(VALID_BOOK_ISBN_HARRY_POTTER)
-                .categoryIds(VALID_BOOK_CATEGORY_IDS_HARRY_POTTER)
-                .price(VALID_BOOK_PRICE_HARRY_POTTER)
+    @Test
+    @DisplayName("""
+            Update existing book,
+            expected status - 202, expected response - BookResponseDto
+            """)
+    @WithMockUser(username = "manager", roles = {"MANAGER"})
+    void updateBook_ValidBookRequestDto_ReturnBooResponseDto() throws Exception {
+        final BookRequestDto requestDto = BookRequestDto.builder()
+                .title(UPDATE_BOOK_TITLE_TEST_TITLE)
+                .author(UPDATE_BOOK_AUTHOR_TEST_AUTHOR)
+                .categoryIds(CREATE_BOOK_CATEGORIES_LORD_OF_THE_RINGS)
+                .isbn(CREATE_BOOK_ISBN_LORD_OF_THE_RINGS)
+                .price(CREATE_BOOK_PRICE_LORD_OF_THE_RINGS)
                 .build();
+        final BookResponseDto expected = BookResponseDto.builder()
+                .title(requestDto.title())
+                .author(requestDto.author())
+                .categoryIds(requestDto.categoryIds())
+                .isbn(requestDto.isbn())
+                .price(requestDto.price())
+                .build();
+        String jsonRequest = objectMapper.writeValueAsString(requestDto);
+        String url = URI + "/" + VALID_BOOK_ID_HOBBIT;
+
+        MvcResult result = mockMvc.perform(put(url)
+                        .content(jsonRequest)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted())
+                .andReturn();
+
+        BookResponseDto actual = objectMapper
+                .readValue(result.getResponse().getContentAsString(), BookResponseDto.class);
+        assertNotNull(actual);
+        assertNotNull(actual.id());
+        assertEquals(VALID_BOOK_ID_HOBBIT, actual.id());
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
+    }
+
+    @Test
+    @DisplayName("""
+            Get existing book by ID,
+            expected status - 200, expected response - BookResponseDto
+            """)
+    @WithMockUser
+    void getBookById_ExistingBookId_ReturnBookResponseDto() throws Exception {
+        BookResponseDto expected = BookResponseDto.builder()
+                .id(VALID_BOOK_ID_HOBBIT)
+                .author(VALID_BOOK_AUTHOR_TOLKIEN)
+                .title(VALID_BOOK_TITLE_HOBBIT)
+                .categoryIds(VALID_BOOK_CATEGORY_IDS_HOBBIT)
+                .isbn(VALID_BOOK_ISBN_HOBBIT)
+                .price(VALID_BOOK_PRICE_HOBBIT)
+                .build();
+        String url = URI + "/" + VALID_BOOK_ID_HOBBIT;
+
+        MvcResult result = mockMvc.perform(get(url)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        BookResponseDto actual = objectMapper
+                .readValue(result.getResponse().getContentAsString(), BookResponseDto.class);
+        assertNotNull(actual);
+        assertNotNull(actual.id());
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
+    }
+
+    @Test
+    @DisplayName("""
+            Get three existing books,
+            expected status - 200, expected response - BookResponseDto[]
+            """)
+    @WithMockUser
+    void getAll_ReturnTwoBookResponseDtoAtFirstPageSizeTwoSortByIdAsc() throws Exception {
+        BookResponseDto responseDtoHarryPotter = BookResponseDto.builder()
+                .id(VALID_BOOK_ID_HARRY_POTTER_CHAMBER_OF_SECRETS)
+                .title(VALID_BOOK_TITLE_HARRY_POTTER_CHAMBER_OF_SECRETS)
+                .author(VALID_BOOK_AUTHOR_ROWLING)
+                .categoryIds(VALID_BOOK_CATEGORY_IDS_HARRY_POTTER_CHAMBER_OF_SECRETS)
+                .isbn(VALID_BOOK_ISBN_HARRY_POTTER_CHAMBER_OF_SECRETS)
+                .price(VALID_BOOK_PRICE_HARRY_POTTER_CHAMBER_OF_SECRETS)
+                .build();
+        BookResponseDto responseDtoHobbit = BookResponseDto.builder()
+                .id(VALID_BOOK_ID_HOBBIT)
+                .title(VALID_BOOK_TITLE_HOBBIT)
+                .author(VALID_BOOK_AUTHOR_TOLKIEN)
+                .categoryIds(VALID_BOOK_CATEGORY_IDS_HOBBIT)
+                .isbn(VALID_BOOK_ISBN_HOBBIT)
+                .price(VALID_BOOK_PRICE_HOBBIT)
+                .build();
+        List<BookResponseDto> expected = List.of(responseDtoHarryPotter, responseDtoHobbit);
+
+        MvcResult result = mockMvc.perform(get(URI)
+                        .param("page", "0")
+                        .param("size", "2")
+                        .param("sort", "id")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        BookResponseDto[] actual = objectMapper
+                .readValue(result.getResponse().getContentAsString(), BookResponseDto[].class);
+        assertNotNull(actual);
+        assertEquals(expected.size(), actual.length);
+        assertEquals(expected, Arrays.stream(actual).toList());
+    }
+
+    @Test
+    @DisplayName("""
+            Delete existing book by ID, expected status - 200
+            """)
+    @WithMockUser(username = "manager", roles = {"MANAGER"})
+    void deleteBook_ExistBookId_ResponseNoContent() throws Exception {
+        String url = URI + "/" + VALID_BOOK_ID_HARRY_POTTER_CHAMBER_OF_SECRETS;
+
+        mockMvc.perform(delete(url)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("""
+            "Search books by params,
+            expected status - 200, expected response - BookResponseDto[]
+            """)
+    @WithMockUser
+    void searchBooks_ValidSearchParams_ReturnExpectedBookResponseDto() throws Exception {
+        BookResponseDto responseDtoHobbit = BookResponseDto.builder()
+                .id(VALID_BOOK_ID_HOBBIT)
+                .title(VALID_BOOK_TITLE_HOBBIT)
+                .author(VALID_BOOK_AUTHOR_TOLKIEN)
+                .categoryIds(VALID_BOOK_CATEGORY_IDS_HOBBIT)
+                .isbn(VALID_BOOK_ISBN_HOBBIT)
+                .price(VALID_BOOK_PRICE_HOBBIT)
+                .build();
+        List<BookResponseDto> expected = List.of(responseDtoHobbit);
+
+        MvcResult result = mockMvc.perform(get(URI + "/search")
+                        .param("page", "0")
+                        .param("size", "3")
+                        .param("sort", "id")
+                        .param("titles","The Hobbit")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        BookResponseDto[] actual = objectMapper
+                .readValue(result.getResponse().getContentAsString(), BookResponseDto[].class);
+        assertNotNull(actual);
+        assertEquals(expected.size(), actual.length);
     }
 
     private static BookResponseDto getBookResponseDto(BookRequestDto requestDto) {
