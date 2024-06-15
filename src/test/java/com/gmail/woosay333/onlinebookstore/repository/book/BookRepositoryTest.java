@@ -4,9 +4,9 @@ import static com.gmail.woosay333.onlinebookstore.util.TestData.DELETE_VALUES_SQ
 import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_CATEGORIES_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_CATEGORIES_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INVALID_BOOK_ID;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.INVALID_BOOK_ID_10L;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.INVALID_BOOK_ISBN;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ID;
+import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ID_HOBBIT;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ISBN_HOBBIT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -88,7 +88,7 @@ class BookRepositoryTest {
             return optional of book with set of categories
             """)
     void findByIdWithCategories_FindingBookByExistingId_ReturnOptionalOfBook() {
-        Optional<Book> actual = bookRepository.findByIdWithCategories(VALID_BOOK_ID);
+        Optional<Book> actual = bookRepository.findByIdWithCategories(VALID_BOOK_ID_HOBBIT);
 
         assertTrue(actual.isPresent(), "Optional of book by existing ID should be present");
         assertNotNull(actual.get().getCategories());
@@ -99,7 +99,7 @@ class BookRepositoryTest {
             Find book with categories by non existing ID, return empty optional
             """)
     void findByIdWithCategories_FindingBookByNonExistingId_ReturnEmptyOptional() {
-        Optional<Book> actual = bookRepository.findByIdWithCategories(INVALID_BOOK_ID);
+        Optional<Book> actual = bookRepository.findByIdWithCategories(INVALID_BOOK_ID_10L);
 
         assertTrue(actual.isEmpty(), "Optional of book by non-existing ID should be empty");
     }
@@ -165,19 +165,18 @@ class BookRepositoryTest {
             """)
     void findAllByIdOrIsbn_GetAllBooksByIdAndIsbn_ReturnsAllBooksByIdAndIsbn() {
         final List<Book> actualValidIdValidIsbn = bookRepository
-                .findAllByIdOrIsbn(VALID_BOOK_ID, VALID_BOOK_ISBN_HOBBIT);
+                .findAllByIdOrIsbn(VALID_BOOK_ID_HOBBIT, VALID_BOOK_ISBN_HOBBIT);
         final List<Book> actualInvalidIdValidIsbn = bookRepository
-                .findAllByIdOrIsbn(INVALID_BOOK_ID, VALID_BOOK_ISBN_HOBBIT);
+                .findAllByIdOrIsbn(INVALID_BOOK_ID_10L, VALID_BOOK_ISBN_HOBBIT);
         final List<Book> actualValidIdInvalidIsbn = bookRepository
-                .findAllByIdOrIsbn(VALID_BOOK_ID, INVALID_BOOK_ISBN);
+                .findAllByIdOrIsbn(VALID_BOOK_ID_HOBBIT, INVALID_BOOK_ISBN);
         final List<Book> actualInvalidIdInvalidIsbn = bookRepository
-                .findAllByIdOrIsbn(INVALID_BOOK_ID, INVALID_BOOK_ISBN);
+                .findAllByIdOrIsbn(INVALID_BOOK_ID_10L, INVALID_BOOK_ISBN);
 
         final int expectedBookListSizeZero = 0;
         final int expectedBookListSizeOne = 1;
-        final int expectedBookListSizeTwo = 2;
 
-        assertEquals(expectedBookListSizeTwo, actualValidIdValidIsbn.size());
+        assertEquals(expectedBookListSizeOne, actualValidIdValidIsbn.size());
         assertEquals(expectedBookListSizeOne, actualInvalidIdValidIsbn.size());
         assertEquals(expectedBookListSizeOne, actualValidIdInvalidIsbn.size());
         assertEquals(expectedBookListSizeZero, actualInvalidIdInvalidIsbn.size());
