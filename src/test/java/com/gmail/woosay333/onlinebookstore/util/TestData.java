@@ -74,4 +74,8 @@ public class TestData {
             "Fantasy description";
     public static final String VALID_CATEGORY_DESCRIPTION_NOVEL =
             "Novel description";
+    public static final String UPDATE_CATEGORY_TITLE =
+            "Updated title";
+    public static final String UPDATE_CATEGORY_DESCRIPTION =
+            "Updated description";
 }
