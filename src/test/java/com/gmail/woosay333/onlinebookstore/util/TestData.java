@@ -59,4 +59,19 @@ public class TestData {
             BigDecimal.valueOf(10.99);
     public static final Long VALID_BOOK_ID_HARRY_POTTER_CHAMBER_OF_SECRETS =
             1L;
+
+    public static final Long VALID_CATEGORY_ID_1L =
+            1L;
+    public static final Long VALID_CATEGORY_ID_2L =
+            2L;
+    public static final Long INVALID_CATEGORY_ID_5L =
+            5L;
+    public static final String VALID_CATEGORY_NAME_FANTASY =
+            "Fantasy";
+    public static final String VALID_CATEGORY_NAME_NOVEL =
+            "Novel";
+    public static final String VALID_CATEGORY_DESCRIPTION_FANTASY =
+            "Fantasy description";
+    public static final String VALID_CATEGORY_DESCRIPTION_NOVEL =
+            "Novel description";
 }
