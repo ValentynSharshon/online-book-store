@@ -1,15 +1,15 @@
 package com.gmail.woosay333.onlinebookstore.controller;
 
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.DELETE_VALUES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_BOOKS_CATEGORIES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_BOOKS_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_CATEGORIES_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_AUTHOR_TOLKIEN;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_CATEGORIES_LORD_OF_THE_RINGS;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_ISBN_LORD_OF_THE_RINGS;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_PRICE_LORD_OF_THE_RINGS;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.CREATE_BOOK_TITLE_LORD_OF_THE_RINGS;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.DELETE_VALUES_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.EXIST_BOOK_ISBN;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_CATEGORIES_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_CATEGORIES_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.UPDATE_BOOK_AUTHOR_TEST_AUTHOR;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.UPDATE_BOOK_TITLE_TEST_TITLE;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_AUTHOR_ROWLING;
@@ -217,14 +217,7 @@ class BookControllerTest {
             """)
     @WithMockUser
     void getBookById_ExistingBookId_ReturnBookResponseDto() throws Exception {
-        BookResponseDto expected = BookResponseDto.builder()
-                .id(VALID_BOOK_ID_HOBBIT)
-                .author(VALID_BOOK_AUTHOR_TOLKIEN)
-                .title(VALID_BOOK_TITLE_HOBBIT)
-                .categoryIds(VALID_BOOK_CATEGORY_IDS_HOBBIT)
-                .isbn(VALID_BOOK_ISBN_HOBBIT)
-                .price(VALID_BOOK_PRICE_HOBBIT)
-                .build();
+        BookResponseDto expected = getHobbitBookResponseDto();
         String url = URI + "/" + VALID_BOOK_ID_HOBBIT;
 
         MvcResult result = mockMvc.perform(get(url)
@@ -246,22 +239,8 @@ class BookControllerTest {
             """)
     @WithMockUser
     void getAll_ReturnTwoBookResponseDtoAtFirstPageSizeTwoSortByIdAsc() throws Exception {
-        BookResponseDto responseDtoHarryPotter = BookResponseDto.builder()
-                .id(VALID_BOOK_ID_HARRY_POTTER_CHAMBER_OF_SECRETS)
-                .title(VALID_BOOK_TITLE_HARRY_POTTER_CHAMBER_OF_SECRETS)
-                .author(VALID_BOOK_AUTHOR_ROWLING)
-                .categoryIds(VALID_BOOK_CATEGORY_IDS_HARRY_POTTER_CHAMBER_OF_SECRETS)
-                .isbn(VALID_BOOK_ISBN_HARRY_POTTER_CHAMBER_OF_SECRETS)
-                .price(VALID_BOOK_PRICE_HARRY_POTTER_CHAMBER_OF_SECRETS)
-                .build();
-        BookResponseDto responseDtoHobbit = BookResponseDto.builder()
-                .id(VALID_BOOK_ID_HOBBIT)
-                .title(VALID_BOOK_TITLE_HOBBIT)
-                .author(VALID_BOOK_AUTHOR_TOLKIEN)
-                .categoryIds(VALID_BOOK_CATEGORY_IDS_HOBBIT)
-                .isbn(VALID_BOOK_ISBN_HOBBIT)
-                .price(VALID_BOOK_PRICE_HOBBIT)
-                .build();
+        BookResponseDto responseDtoHarryPotter = getHarryPotterBookResponseDto();
+        BookResponseDto responseDtoHobbit = getHobbitBookResponseDto();
         List<BookResponseDto> expected = List.of(responseDtoHarryPotter, responseDtoHobbit);
 
         MvcResult result = mockMvc.perform(get(URI)
@@ -300,14 +279,7 @@ class BookControllerTest {
             """)
     @WithMockUser
     void searchBooks_ValidSearchParams_ReturnExpectedBookResponseDto() throws Exception {
-        BookResponseDto responseDtoHobbit = BookResponseDto.builder()
-                .id(VALID_BOOK_ID_HOBBIT)
-                .title(VALID_BOOK_TITLE_HOBBIT)
-                .author(VALID_BOOK_AUTHOR_TOLKIEN)
-                .categoryIds(VALID_BOOK_CATEGORY_IDS_HOBBIT)
-                .isbn(VALID_BOOK_ISBN_HOBBIT)
-                .price(VALID_BOOK_PRICE_HOBBIT)
-                .build();
+        BookResponseDto responseDtoHobbit = getHobbitBookResponseDto();
         List<BookResponseDto> expected = List.of(responseDtoHobbit);
 
         MvcResult result = mockMvc.perform(get(URI + "/search")
@@ -325,13 +297,25 @@ class BookControllerTest {
         assertEquals(expected.size(), actual.length);
     }
 
-    private static BookResponseDto getBookResponseDto(BookRequestDto requestDto) {
+    private static BookResponseDto getHobbitBookResponseDto() {
         return BookResponseDto.builder()
-                .title(requestDto.title())
-                .author(requestDto.author())
-                .isbn(requestDto.isbn())
-                .categoryIds(requestDto.categoryIds())
-                .price(requestDto.price())
+                .id(VALID_BOOK_ID_HOBBIT)
+                .title(VALID_BOOK_TITLE_HOBBIT)
+                .author(VALID_BOOK_AUTHOR_TOLKIEN)
+                .categoryIds(VALID_BOOK_CATEGORY_IDS_HOBBIT)
+                .isbn(VALID_BOOK_ISBN_HOBBIT)
+                .price(VALID_BOOK_PRICE_HOBBIT)
+                .build();
+    }
+
+    private static BookResponseDto getHarryPotterBookResponseDto() {
+        return BookResponseDto.builder()
+                .id(VALID_BOOK_ID_HARRY_POTTER_CHAMBER_OF_SECRETS)
+                .title(VALID_BOOK_TITLE_HARRY_POTTER_CHAMBER_OF_SECRETS)
+                .author(VALID_BOOK_AUTHOR_ROWLING)
+                .categoryIds(VALID_BOOK_CATEGORY_IDS_HARRY_POTTER_CHAMBER_OF_SECRETS)
+                .isbn(VALID_BOOK_ISBN_HARRY_POTTER_CHAMBER_OF_SECRETS)
+                .price(VALID_BOOK_PRICE_HARRY_POTTER_CHAMBER_OF_SECRETS)
                 .build();
     }
 }

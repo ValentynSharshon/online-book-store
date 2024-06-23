@@ -70,12 +70,7 @@ class CategoryServiceImplTest {
         when(categoryRepository.findAll(any(Pageable.class)))
                 .thenReturn(categories);
         when(categoryMapper.toResponseDto(any(Category.class)))
-                .thenReturn(getCategoryResponseDto(
-                                VALID_CATEGORY_ID_1L,
-                                VALID_CATEGORY_NAME_FANTASY,
-                                VALID_CATEGORY_DESCRIPTION_FANTASY
-                        )
-                );
+                .thenReturn(getValidCategoryResponseDto());
 
         List<CategoryResponseDto> actual = categoryService.getAllCategories(pageable);
         assertEquals(categoriesFromDb.size(), actual.size());
@@ -91,11 +86,7 @@ class CategoryServiceImplTest {
                 VALID_CATEGORY_DESCRIPTION_FANTASY
         );
         existingCategory.setId(VALID_CATEGORY_ID_1L);
-        CategoryResponseDto responseDto = getCategoryResponseDto(
-                VALID_CATEGORY_ID_1L,
-                VALID_CATEGORY_NAME_FANTASY,
-                VALID_CATEGORY_DESCRIPTION_FANTASY
-        );
+        CategoryResponseDto responseDto = getValidCategoryResponseDto();
 
         when(categoryRepository.findById(VALID_CATEGORY_ID_1L))
                 .thenReturn(Optional.of(existingCategory));
@@ -113,7 +104,7 @@ class CategoryServiceImplTest {
             """)
     void getCategoryById_NonExistingCategoryId_ThrowException() {
         when(categoryRepository.findById(INVALID_CATEGORY_ID_5L))
-                .thenReturn(java.util.Optional.empty());
+                .thenReturn(Optional.empty());
 
         Exception exception = assertThrows(EntityNotFoundException.class,
                 () -> categoryService.getCategoryById(INVALID_CATEGORY_ID_5L));
@@ -126,7 +117,7 @@ class CategoryServiceImplTest {
             Create new category successfully
             """)
     void createNewCategory_ValidCategoryRequestDto_ReturnCategoryResponseDto() {
-        CategoryRequestDto requestDto = getCategoryRequestDto(
+        CategoryRequestDto requestDto = new CategoryRequestDto(
                 VALID_CATEGORY_NAME_FANTASY,
                 VALID_CATEGORY_DESCRIPTION_FANTASY
         );
@@ -142,11 +133,7 @@ class CategoryServiceImplTest {
 
         when(categoryMapper.toModel(requestDto)).thenReturn(categoryToSave);
         when(categoryRepository.save(categoryToSave)).thenReturn(savedCategory);
-        when(categoryMapper.toResponseDto(savedCategory)).thenReturn(getCategoryResponseDto(
-                VALID_CATEGORY_ID_1L,
-                VALID_CATEGORY_NAME_FANTASY,
-                VALID_CATEGORY_DESCRIPTION_FANTASY
-        ));
+        when(categoryMapper.toResponseDto(savedCategory)).thenReturn(getValidCategoryResponseDto());
 
         CategoryResponseDto actual = categoryService.createNewCategory(requestDto);
 
@@ -159,7 +146,7 @@ class CategoryServiceImplTest {
             Update existing category, return CategoryResponseDto
             """)
     void updateCategory_ExistingCategoryIdAndValidCategoryRequestDto_ReturnsCategoryResponseDto() {
-        CategoryRequestDto requestDto = getCategoryRequestDto(
+        CategoryRequestDto requestDto = new CategoryRequestDto(
                 VALID_CATEGORY_NAME_FANTASY,
                 VALID_CATEGORY_DESCRIPTION_FANTASY
         );
@@ -168,11 +155,7 @@ class CategoryServiceImplTest {
                 VALID_CATEGORY_DESCRIPTION_FANTASY
         );
         updatedCategory.setId(VALID_CATEGORY_ID_1L);
-        CategoryResponseDto responseDto = getCategoryResponseDto(
-                VALID_CATEGORY_ID_1L,
-                VALID_CATEGORY_NAME_FANTASY,
-                VALID_CATEGORY_DESCRIPTION_FANTASY
-        );
+        CategoryResponseDto responseDto = getValidCategoryResponseDto();
 
         when(categoryRepository.existsById(VALID_CATEGORY_ID_1L)).thenReturn(true);
         when(categoryMapper.toModel(requestDto)).thenReturn(updatedCategory);
@@ -198,10 +181,12 @@ class CategoryServiceImplTest {
 
         Exception actual = assertThrows(EntityNotFoundException.class,
                 () -> categoryService.updateCategory(VALID_CATEGORY_ID_1L,
-                        getCategoryRequestDto(
+                        new CategoryRequestDto(
                                 VALID_CATEGORY_NAME_FANTASY,
-                                VALID_CATEGORY_DESCRIPTION_FANTASY)
-                ));
+                                VALID_CATEGORY_DESCRIPTION_FANTASY
+                        )
+                )
+        );
 
         assertEquals(String.format("Can't find category by id %d", VALID_CATEGORY_ID_1L),
                 actual.getMessage());
@@ -282,17 +267,11 @@ class CategoryServiceImplTest {
         return category;
     }
 
-    private static CategoryResponseDto getCategoryResponseDto(Long id,
-                                                              String name,
-                                                              String description) {
+    private static CategoryResponseDto getValidCategoryResponseDto() {
         return CategoryResponseDto.builder()
-                .id(id)
-                .name(name)
-                .description(description)
+                .id(VALID_CATEGORY_ID_1L)
+                .name(VALID_CATEGORY_NAME_FANTASY)
+                .description(VALID_CATEGORY_DESCRIPTION_FANTASY)
                 .build();
-    }
-
-    private static CategoryRequestDto getCategoryRequestDto(String name, String description) {
-        return new CategoryRequestDto(name, description);
     }
 }

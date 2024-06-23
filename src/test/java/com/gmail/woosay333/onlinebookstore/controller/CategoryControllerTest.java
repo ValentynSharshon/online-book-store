@@ -1,9 +1,9 @@
 package com.gmail.woosay333.onlinebookstore.controller;
 
-import static com.gmail.woosay333.onlinebookstore.util.TestData.DELETE_VALUES_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_CATEGORIES_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_CATEGORIES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.DELETE_VALUES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_BOOKS_CATEGORIES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_BOOKS_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_CATEGORIES_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.UPDATE_CATEGORY_DESCRIPTION;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.UPDATE_CATEGORY_TITLE;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_AUTHOR_ROWLING;

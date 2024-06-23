@@ -3,7 +3,7 @@ package com.gmail.woosay333.onlinebookstore.config;
 import org.testcontainers.containers.MySQLContainer;
 
 public class CustomMySqlContainer extends MySQLContainer<CustomMySqlContainer> {
-    private static final String DB_IMAGE = "mysql:latest";
+    private static final String DB_IMAGE = "mysql:8";
     private static CustomMySqlContainer instance;
 
     public CustomMySqlContainer() {

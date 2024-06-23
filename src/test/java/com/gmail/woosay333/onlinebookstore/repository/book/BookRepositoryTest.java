@@ -1,13 +1,14 @@
 package com.gmail.woosay333.onlinebookstore.repository.book;
 
-import static com.gmail.woosay333.onlinebookstore.util.TestData.DELETE_VALUES_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_CATEGORIES_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_BOOKS_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_CATEGORIES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.DELETE_VALUES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_BOOKS_CATEGORIES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_BOOKS_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_CATEGORIES_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.INVALID_BOOK_ID_10L;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.INVALID_BOOK_ISBN;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ID_HOBBIT;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_BOOK_ISBN_HOBBIT;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -152,11 +154,8 @@ class BookRepositoryTest {
         assertNotNull(actualFantasy);
         assertNotNull(actualNovel);
 
-        int expectedSizeFantasy = 2;
-        int expectedSizeNovel = 1;
-
-        assertEquals(expectedSizeFantasy, actualFantasy.size(), "Size should be equals");
-        assertEquals(expectedSizeNovel, actualNovel.size(), "Size should be equals");
+        assertThat(actualFantasy, IsCollectionWithSize.hasSize(2));
+        assertThat(actualNovel, IsCollectionWithSize.hasSize(1));
     }
 
     @Test
@@ -173,12 +172,9 @@ class BookRepositoryTest {
         final List<Book> actualInvalidIdInvalidIsbn = bookRepository
                 .findAllByIdOrIsbn(INVALID_BOOK_ID_10L, INVALID_BOOK_ISBN);
 
-        final int expectedBookListSizeZero = 0;
-        final int expectedBookListSizeOne = 1;
-
-        assertEquals(expectedBookListSizeOne, actualValidIdValidIsbn.size());
-        assertEquals(expectedBookListSizeOne, actualInvalidIdValidIsbn.size());
-        assertEquals(expectedBookListSizeOne, actualValidIdInvalidIsbn.size());
-        assertEquals(expectedBookListSizeZero, actualInvalidIdInvalidIsbn.size());
+        assertThat(actualValidIdValidIsbn, IsCollectionWithSize.hasSize(1));
+        assertThat(actualInvalidIdValidIsbn, IsCollectionWithSize.hasSize(1));
+        assertThat(actualValidIdInvalidIsbn, IsCollectionWithSize.hasSize(1));
+        assertThat(actualInvalidIdInvalidIsbn, IsCollectionWithSize.hasSize(0));
     }
 }

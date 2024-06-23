@@ -1,7 +1,7 @@
 package com.gmail.woosay333.onlinebookstore.repository.category;
 
-import static com.gmail.woosay333.onlinebookstore.util.TestData.DELETE_VALUES_SQL;
-import static com.gmail.woosay333.onlinebookstore.util.TestData.INSERT_CATEGORIES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.DELETE_VALUES_SQL;
+import static com.gmail.woosay333.onlinebookstore.util.SqlScript.INSERT_CATEGORIES_SQL;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_CATEGORY_ID_1L;
 import static com.gmail.woosay333.onlinebookstore.util.TestData.VALID_CATEGORY_ID_2L;
 import static org.junit.jupiter.api.Assertions.assertEquals;

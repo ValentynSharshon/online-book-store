@@ -23,15 +23,6 @@ public class TestData {
     public static final Long INVALID_BOOK_ID_10L =
             10L;
 
-    public static final String DELETE_VALUES_SQL =
-            "db/script/delete-values.sql";
-    public static final String INSERT_BOOKS_SQL =
-            "db/script/insert-values-into-books.sql";
-    public static final String INSERT_CATEGORIES_SQL =
-            "db/script/insert-values-into-categories.sql";
-    public static final String INSERT_BOOKS_CATEGORIES_SQL =
-            "db/script/insert-values-into-books-categories.sql";
-
     public static final String CREATE_BOOK_TITLE_LORD_OF_THE_RINGS =
             "The Lord of the Rings";
     public static final String CREATE_BOOK_AUTHOR_TOLKIEN =
