@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
@@ -35,9 +36,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
-            HttpHeaders headers,
+            @NonNull HttpHeaders headers,
             HttpStatusCode status,
-            WebRequest request
+            @NonNull WebRequest request
     ) {
         List<String> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(this::getErrorMessage)
@@ -48,9 +49,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
             HttpMessageNotReadableException ex,
-            HttpHeaders headers,
+            @NonNull HttpHeaders headers,
             HttpStatusCode status,
-            WebRequest request) {
+            @NonNull WebRequest request) {
         return getResponseEntity(HttpStatus.valueOf(status.value()), ex.getLocalizedMessage());
     }
 
